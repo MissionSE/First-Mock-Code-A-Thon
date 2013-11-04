@@ -1,7 +1,5 @@
 package com.missionse.securityhelper;
 
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -11,6 +9,7 @@ import android.view.MenuItem;
 import com.missionse.modelviewer.ModelViewerFragment;
 import com.missionse.modelviewer.ModelViewerFragmentFactory;
 import com.missionse.modelviewer.ObjectLoadedListener;
+import com.missionse.securityhelper.database.ExitDetailFragment;
 import com.missionse.securityhelper.database.LocationDetailFragment;
 import com.missionse.securityhelper.database.PersonDetailFragment;
 import com.missionse.securityhelper.database.PersonListFragment;
@@ -22,6 +21,7 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 	private PersonListFragment personListFragment;
 	private PersonDetailFragment personDetailFragment;
 	private LocationDetailFragment locationDetailFragment;
+	private ExitDetailFragment exitDetailFragment;
 	private MapFragment mapFragment;
 	private ModelViewerFragment modelFragment;
 
@@ -30,33 +30,21 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_security_helper);
 
-		ActionBar actionBar = this.getActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		actionBar.setDisplayShowTitleEnabled(false);
-
 		personListFragment = new PersonListFragment();
 		personDetailFragment = new PersonDetailFragment();
+		locationDetailFragment = new LocationDetailFragment();
+		exitDetailFragment = new ExitDetailFragment();
 
 		mapFragment = new MapFragment();
 
 		modelFragment = ModelViewerFragmentFactory.createObjModelFragment(R.raw.lobby_obj);
 		modelFragment.registerObjectLoadedListener(this);
 
-		SecurityHelperTabListener databaseTabListener = new SecurityHelperTabListener(this, R.id.left_content);
-		SecurityHelperTabListener mapTabListener = new SecurityHelperTabListener(this, R.id.right_content);
-
-		Tab databaseTab = actionBar.newTab().setText(R.string.database).setTabListener(databaseTabListener);
-		Tab mapTab = actionBar.newTab().setText(R.string.floorplan).setTabListener(mapTabListener);
-
-		actionBar.addTab(databaseTab);
-		actionBar.addTab(mapTab);
-
 		FragmentTransaction databaseTransaction = getFragmentManager().beginTransaction();
 		databaseTransaction.replace(R.id.left_content, personListFragment);
 		databaseTransaction.commit();
 
 		FragmentTransaction mapTransaction = getFragmentManager().beginTransaction();
-//		mapTransaction.replace(R.id.right_content, modelFragment);
 		mapTransaction.replace(R.id.right_content, mapFragment);
 		mapTransaction.commit();
 	}
@@ -97,12 +85,24 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		personDetailFragment.refresh();
 	}
 
-	public void showLocation(final String location) {
-//		locationDetailFragment.setLocation(location);
+	public void showPersonDetail(final String person) {
+		personDetailFragment.setPerson(person);
 
-//		FragmentTransaction leftTransaction = getFragmentManager().beginTransaction();
-//		leftTransaction.replace(R.id.left_content, locationDetailFragment);
-//		leftTransaction.commit();
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.left_content, personDetailFragment);
+		transaction.commit();
+
+		getFragmentManager().executePendingTransactions();
+
+		personDetailFragment.refresh();
+	}
+
+	public void showLocation(final String location) {
+		locationDetailFragment.setLocation(location);
+
+		FragmentTransaction leftTransaction = getFragmentManager().beginTransaction();
+		leftTransaction.replace(R.id.left_content, locationDetailFragment);
+		leftTransaction.commit();
 
 		FragmentTransaction rightTransaction = getFragmentManager().beginTransaction();
 		rightTransaction.replace(R.id.right_content, modelFragment);
@@ -110,7 +110,19 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 
 		getFragmentManager().executePendingTransactions();
 
-//		locationDetailFragment.refresh();
+		locationDetailFragment.refresh();
+	}
+
+	public void showExitDetail(final String exit) {
+		exitDetailFragment.setExit(exit);
+
+		FragmentTransaction leftTransaction = getFragmentManager().beginTransaction();
+		leftTransaction.replace(R.id.left_content, exitDetailFragment);
+		leftTransaction.commit();
+
+		getFragmentManager().executePendingTransactions();
+
+		exitDetailFragment.refresh();
 	}
 
 	@Override
