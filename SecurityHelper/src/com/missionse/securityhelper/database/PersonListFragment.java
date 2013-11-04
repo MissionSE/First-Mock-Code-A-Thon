@@ -48,10 +48,9 @@ public class PersonListFragment extends ListFragment {
 	}
 	
 	
-	public void initComponents(View tRoot){
+	private void initComponents(View tRoot){
 		
 	}
-	
 	
 	
 
