@@ -2,42 +2,45 @@ package com.missionse.securityhelper;
 
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
-import android.app.Fragment;
+import android.app.Activity;
 import android.app.FragmentTransaction;
-import android.content.Context;
+import android.view.View;
 
-public class SecurityHelperTabListener<T extends Fragment> implements TabListener {
+public class SecurityHelperTabListener implements TabListener {
 
-	private Fragment fragment;
-	private Context context;
-	private Class<T> fragmentClassType;
-	private String transactionTag;
+	private Activity activity;
+	private int layout;
 
-	public SecurityHelperTabListener(final Context activity, final String tag, final Class<T> clazz) {
-		context = activity;
-		transactionTag = tag;
-		fragmentClassType = clazz;
+	public SecurityHelperTabListener(final Activity activity, final int id) {
+		this.activity = activity;
+		layout = id;
 	}
 
 	@Override
 	public void onTabReselected(final Tab tab, final FragmentTransaction transaction) {
-		// Nothing to do.
+		View otherContent;
+		if (layout == R.id.left_content) {
+			otherContent = activity.findViewById(R.id.right_content);
+			showHideOtherContent(otherContent);
+		} else if (layout == R.id.right_content) {
+			otherContent = activity.findViewById(R.id.left_content);
+			showHideOtherContent(otherContent);
+		}
+	}
+
+	private void showHideOtherContent(final View otherContent) {
+		if (otherContent.getVisibility() == View.VISIBLE) {
+			otherContent.setVisibility(View.GONE);
+		} else if (otherContent.getVisibility() == View.GONE) {
+			otherContent.setVisibility(View.VISIBLE);
+		}
 	}
 
 	@Override
 	public void onTabSelected(final Tab tab, final FragmentTransaction transaction) {
-		if (fragment == null) {
-			fragment = Fragment.instantiate(context, fragmentClassType.getName());
-			transaction.add(R.id.content, fragment, transactionTag);
-		} else {
-			transaction.attach(fragment);
-		}
 	}
 
 	@Override
 	public void onTabUnselected(final Tab tab, final FragmentTransaction transaction) {
-		if (fragment != null) {
-			transaction.detach(fragment);
-		}
 	}
 }
