@@ -10,8 +10,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -25,8 +27,7 @@ import com.missionse.securityhelper.R;
 import com.missionse.securityhelper.SecurityHelper;
 import com.missionse.securityhelper.database.model.Person;
 
-public class PersonListFragment extends ListFragment implements
-		OnItemClickListener {
+public class PersonListFragment extends ListFragment {
 
 	// private List<Person> persons = new LinkedList<Person>();
 	private EditText searchBox;
@@ -115,18 +116,19 @@ public class PersonListFragment extends ListFragment implements
 			}
 		});
 		listView = (ListView) tRoot.findViewById(android.R.id.list);
-		listView.setOnItemClickListener(this);
+		//listView.setOnItemClickListener(this);
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+    public void onListItemClick(ListView l, View v, int position, long id) {
 		if (!isFiltered) {
-			Person p = array_pre.get(arg2);
+			Person p = array_pre.get(position);
 			((SecurityHelper) this.getActivity()).showPersonDetail(p.firstName);
 		} else {
-			Person p = array_sort.get(arg2);
+			Person p = array_sort.get(position);
 			((SecurityHelper) this.getActivity()).showPersonDetail(p.firstName);
 		}
+
 
 	}
 
@@ -158,4 +160,6 @@ public class PersonListFragment extends ListFragment implements
 			return convertView;
 		}
 	}
+
+	
 }

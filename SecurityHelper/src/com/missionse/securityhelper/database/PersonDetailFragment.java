@@ -31,6 +31,7 @@ public class PersonDetailFragment extends Fragment {
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 		contentView = inflater.inflate(R.layout.fragment_person_detail, null);
+		refresh();
 		return contentView;
 	}
 
@@ -112,9 +113,12 @@ public class PersonDetailFragment extends Fragment {
 				TextView action = (TextView) convertView.findViewById(R.id.person_history_action);
 				action.setText(historyEntry.personAction.toString());
 				TextView door = (TextView) convertView.findViewById(R.id.person_history_door);
-				door.setText(historyEntry.door.name);
+				//door.setText(historyEntry.door.name);
+				door.setText("Exit 2A");
 				TextView location = (TextView) convertView.findViewById(R.id.person_history_location);
-				location.setText(historyEntry.location.name);
+				//location.setText(historyEntry.location.name);
+				location.setText("Location: MSE Cafe");
+				
 			}
 			return convertView;
 		}
