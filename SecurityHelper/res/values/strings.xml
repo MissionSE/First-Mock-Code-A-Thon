@@ -4,8 +4,8 @@
     <string name="app_name">SecurityHelper</string>
     <string name="action_settings">Settings</string>
     
-    <!-- Section headers for main menu -->
-    <string name="floorplan_activity">Floor Plan</string>
-    <string name="database_activity">Personnel and Location Database</string>
+    <!-- Section titles for tab navigation -->
+    <string name="floorplan">Floor Plan</string>
+    <string name="database">Database</string>
 
 </resources>
