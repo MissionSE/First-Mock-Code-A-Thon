@@ -2,7 +2,7 @@ package com.missionse.securityhelper.map;
 
 import java.util.ArrayList;
 
-import android.content.Context;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,13 +11,13 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import com.missionse.securityhelper.R;
+import com.missionse.securityhelper.SecurityHelper;
 
 public class MapView extends View implements GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener {
 	private Paint paint;
@@ -33,7 +33,9 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 
 	private ArrayList<Rect> locations;
 
-	public MapView(final Context context) {
+	private SecurityHelper securityHelper;
+
+	public MapView(final Activity context) {
 		super(context);
 		paint = new Paint();
 		paint.setColor(Color.argb(200, 0, 125, 125));
@@ -53,6 +55,8 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 
 		gestureDetector = new GestureDetector(context, this);
 		scaleGestureDetector = new ScaleGestureDetector(context, this);
+
+		securityHelper = (SecurityHelper) context;
 	}
 
 	@Override
@@ -124,7 +128,7 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 		for (Rect location : locations) {
 			transformLocation(location, correctedLocation);
 			if (correctedLocation.contains(xTouch, yTouch)) {
-				Log.e("MapView", "Collision!");
+				securityHelper.showLocation("CompassRoom");
 			}
 		}
 

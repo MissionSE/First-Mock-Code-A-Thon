@@ -8,19 +8,22 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.missionse.modelviewer.ModelViewerFragment;
+import com.missionse.modelviewer.ModelViewerFragmentFactory;
+import com.missionse.modelviewer.ObjectLoadedListener;
 import com.missionse.securityhelper.database.LocationDetailFragment;
 import com.missionse.securityhelper.database.PersonDetailFragment;
 import com.missionse.securityhelper.database.PersonListFragment;
-import com.missionse.securityhelper.database.model.BuildingLocation;
 import com.missionse.securityhelper.database.model.Person;
 import com.missionse.securityhelper.map.MapFragment;
 
-public class SecurityHelper extends Activity {
+public class SecurityHelper extends Activity implements ObjectLoadedListener {
 
 	private PersonListFragment personListFragment;
 	private PersonDetailFragment personDetailFragment;
 	private LocationDetailFragment locationDetailFragment;
 	private MapFragment mapFragment;
+	private ModelViewerFragment modelFragment;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -36,6 +39,9 @@ public class SecurityHelper extends Activity {
 
 		mapFragment = new MapFragment();
 
+		modelFragment = ModelViewerFragmentFactory.createObjModelFragment(R.raw.lobby_obj);
+		modelFragment.registerObjectLoadedListener(this);
+
 		SecurityHelperTabListener databaseTabListener = new SecurityHelperTabListener(this, R.id.left_content);
 		SecurityHelperTabListener mapTabListener = new SecurityHelperTabListener(this, R.id.right_content);
 
@@ -50,6 +56,7 @@ public class SecurityHelper extends Activity {
 		databaseTransaction.commit();
 
 		FragmentTransaction mapTransaction = getFragmentManager().beginTransaction();
+//		mapTransaction.replace(R.id.right_content, modelFragment);
 		mapTransaction.replace(R.id.right_content, mapFragment);
 		mapTransaction.commit();
 	}
@@ -90,19 +97,27 @@ public class SecurityHelper extends Activity {
 		personDetailFragment.refresh();
 	}
 
-	public void showLocation(final BuildingLocation location) {
-		locationDetailFragment.setLocation(location);
+	public void showLocation(final String location) {
+//		locationDetailFragment.setLocation(location);
 
-		FragmentTransaction leftTransaction = getFragmentManager().beginTransaction();
-		leftTransaction.replace(R.id.left_content, locationDetailFragment);
-		leftTransaction.commit();
+//		FragmentTransaction leftTransaction = getFragmentManager().beginTransaction();
+//		leftTransaction.replace(R.id.left_content, locationDetailFragment);
+//		leftTransaction.commit();
 
-		// FragmentTransaction rightTransaction = getFragmentManager().beginTransaction();
-		// rightTransaction.replace(R.id.right_content, modelFragment);
-		// rightTransaction.commit();
+		FragmentTransaction rightTransaction = getFragmentManager().beginTransaction();
+		rightTransaction.replace(R.id.right_content, modelFragment);
+		rightTransaction.commit();
 
 		getFragmentManager().executePendingTransactions();
 
-		locationDetailFragment.refresh();
+//		locationDetailFragment.refresh();
+	}
+
+	@Override
+	public void onObjectLoaded() {
+		if (modelFragment.getAnimator() != null) {
+			modelFragment.getAnimator().scaleTo(0.045f, 250);
+			modelFragment.getAnimator().rotateTo(-45f, 225f, 0f, 250);
+		}
 	}
 }
