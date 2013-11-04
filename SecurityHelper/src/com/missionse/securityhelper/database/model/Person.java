@@ -35,5 +35,15 @@ public class Person extends Model<Person> {
 		//emtpy constructor needed for library
 	}
 	
+	
+	@Override
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append(firstName + " ");
+		if(middleName != null && !middleName.equals(""))
+			sb.append(middleName + " ");
+		sb.append(lastName);
+		return sb.toString();
+	}
 
 }

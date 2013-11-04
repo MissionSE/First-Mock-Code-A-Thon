@@ -22,8 +22,10 @@ public class BuildingLocation extends Model<BuildingLocation> {
 	public EntityList<BuildingLocation,Person> peopleInLocation = new EntityList<BuildingLocation,Person>(BuildingLocation.class,Person.class,this);
 	
 	@OneToMany(toType = History.class, onField = "location")
-    public EntityList<BuildingLocation, History> history = new EntityList(Person.class, History.class, this);
+    public EntityList<BuildingLocation, History> history = new EntityList<BuildingLocation,History>(BuildingLocation.class, History.class, this);
 	
+	@OneToMany(toType = ExitDoor.class, onField = "location")
+	public EntityList<BuildingLocation,ExitDoor> exits = new EntityList<BuildingLocation,ExitDoor>(BuildingLocation.class, ExitDoor.class,this);
 	
 	public BuildingLocation(){
 		//empty constructor needed for library
