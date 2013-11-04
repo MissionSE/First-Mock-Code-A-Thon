@@ -19,9 +19,9 @@ public class History extends Model<History> {
 
 	@ManyToOne
 	public ExitDoor door;
-
-	public long timestamp;
-
-	public HistoryAction personAction;
-
+	
+	public long timestamp; 
+	
+	public HistoryAction personAction; 
+	
 }
