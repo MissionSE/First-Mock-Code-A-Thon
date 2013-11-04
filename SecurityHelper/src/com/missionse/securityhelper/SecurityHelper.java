@@ -1,11 +1,13 @@
 package com.missionse.securityhelper;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.missionse.modelviewer.ModelViewerFragment;
 import com.missionse.modelviewer.ModelViewerFragmentFactory;
 import com.missionse.modelviewer.ObjectLoadedListener;
@@ -25,6 +27,9 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 	private MapFragment mapFragment;
 	private ModelViewerFragment modelFragment;
 
+	private SlidingMenu leftMenu;
+	private SlidingMenu rightMenu;
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,6 +45,24 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		modelFragment = ModelViewerFragmentFactory.createObjModelFragment(R.raw.lobby_obj);
 		modelFragment.registerObjectLoadedListener(this);
 
+		leftMenu = new SlidingMenu(this);
+		leftMenu.setMode(SlidingMenu.LEFT);
+		leftMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		leftMenu.setShadowWidthRes(R.dimen.drawer_shadow_width);
+		leftMenu.setShadowDrawable(R.drawable.shadow);
+		leftMenu.setBehindWidthRes(R.dimen.drawer_width);
+		leftMenu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
+		leftMenu.setMenu(R.layout.drawer_list);
+
+		rightMenu = new SlidingMenu(this);
+		rightMenu.setMode(SlidingMenu.RIGHT);
+		rightMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		rightMenu.setShadowWidthRes(R.dimen.drawer_shadow_width);
+		rightMenu.setShadowDrawable(R.drawable.shadow);
+		rightMenu.setBehindWidthRes(R.dimen.drawer_width);
+		rightMenu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
+		rightMenu.setMenu(R.layout.nav_drawer);
+
 		FragmentTransaction databaseTransaction = getFragmentManager().beginTransaction();
 		databaseTransaction.replace(R.id.left_content, personListFragment);
 		databaseTransaction.commit();
@@ -47,6 +70,22 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		FragmentTransaction mapTransaction = getFragmentManager().beginTransaction();
 		mapTransaction.replace(R.id.right_content, mapFragment);
 		mapTransaction.commit();
+
+		Fragment leftDrawerFragment;
+		if (savedInstanceState == null) {
+			FragmentTransaction transaction = this.getFragmentManager().beginTransaction();
+			leftDrawerFragment = new SecurityHelperLeftDrawerFragment();
+			transaction.replace(R.id.menu_frame, leftDrawerFragment);
+			transaction.commit();
+		}
+
+		Fragment drawerFragment;
+		if (savedInstanceState == null) {
+			FragmentTransaction transaction = this.getFragmentManager().beginTransaction();
+			drawerFragment = new SecurityHelperRightDrawerFragment();
+			transaction.replace(R.id.menu_frame, drawerFragment);
+			transaction.commit();
+		}
 	}
 
 	@Override
@@ -123,6 +162,14 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		getFragmentManager().executePendingTransactions();
 
 		exitDetailFragment.refresh();
+	}
+
+	public void showMap() {
+		FragmentTransaction leftTransaction = getFragmentManager().beginTransaction();
+		leftTransaction.replace(R.id.right_content, mapFragment);
+		leftTransaction.commit();
+
+		getFragmentManager().executePendingTransactions();
 	}
 
 	@Override
