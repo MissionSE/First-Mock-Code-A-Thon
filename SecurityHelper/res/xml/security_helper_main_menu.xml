@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+    <header
+        android:fragment="com.missionse.securityhelper.GeneralSectionFragment"
+        android:title="@string/floorplan_activity"
+        android:summary="An interactive floor plan with key locations and statuses marked." />
+    <header
+        android:fragment="com.missionse.securityhelper.database.DatabaseActivity"
+        android:title="@string/database_activity"
+        android:summary="A database of personnel and locations." />
+</preference-headers>
