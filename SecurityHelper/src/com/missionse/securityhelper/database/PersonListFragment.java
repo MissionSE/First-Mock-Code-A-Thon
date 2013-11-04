@@ -1,11 +1,12 @@
 package com.missionse.securityhelper.database;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-
-import org.orman.mapper.Model;
+import java.util.Random;
 
 import android.app.ListFragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,21 +14,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.missionse.securityhelper.R;
+import com.missionse.securityhelper.SecurityHelper;
 import com.missionse.securityhelper.database.model.Person;
 
-public class PersonListFragment extends ListFragment implements OnItemSelectedListener {
+public class PersonListFragment extends ListFragment implements
+		OnItemClickListener {
 
-	//private List<Person> persons = new LinkedList<Person>();
+	// private List<Person> persons = new LinkedList<Person>();
 	private EditText searchBox;
-	private int textlength=0;
-	private ArrayList<Person> array_sort= new ArrayList<Person>();
+	private ListView listView;
+	private int textlength = 0;
+	private ArrayList<Person> array_sort = new ArrayList<Person>();
 	private List<Person> array_pre;
 	private boolean isFiltered = false;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -37,29 +45,41 @@ public class PersonListFragment extends ListFragment implements OnItemSelectedLi
 
 		initComponents(lRootView);
 
-		updatePersonList(Model.fetchAll(Person.class));
-		
-		//getListView().setOnItemSelectedListener(this);
-		
-		return lRootView;
-		
+		// updatePersonList(Model.fetchAll(Person.class));
+		updatePersonList(getPeople());
 
+		return lRootView;
+
+	}
+
+	public static List<Person> getPeople() {
+		String[] fn = new String[] { "Roberto", "James", "Kyle", "Ron", "Mike",
+				"Eric" };
+		List<Person> persons = new LinkedList<Person>();
+		Random r = new Random();
+		for (int x = 0; x < 20; x++) {
+			Person p = new Person();
+			p.firstName = fn[r.nextInt(fn.length)];
+			p.lastName = fn[r.nextInt(fn.length)];
+			persons.add(p);
+		}
+		return persons;
 	}
 
 	private void updatePersonList(List<Person> persons) {
 
 		array_pre = persons;
-		
-		ListAdapter l = new PersonAdapter(
-				getActivity().getApplicationContext(),
-				R.layout.fragment_person_list, R.id.person_list_entry_name,
+
+		ListAdapter l = new PersonAdapter(getActivity(),
+				R.layout.person_list_entry,
 				persons);
 		setListAdapter(l);
-		
+
 	}
 
 	private void initComponents(View tRoot) {
-		searchBox = (EditText)tRoot.findViewById(R.id.person_list_searchtextbox);
+		searchBox = (EditText) tRoot
+				.findViewById(R.id.person_list_searchtextbox);
 		searchBox.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable s) {
 			}
@@ -74,48 +94,68 @@ public class PersonListFragment extends ListFragment implements OnItemSelectedLi
 				array_sort.clear();
 				for (int i = 0; i < array_pre.size(); i++) {
 					if (textlength <= array_pre.get(i).toString().length()) {
-						if (searchBox.getText()
+						if (searchBox
+								.getText()
 								.toString()
 								.equalsIgnoreCase(
-										(String) array_pre.get(i).toString().subSequence(
-												0, textlength))) {
+										(String) array_pre.get(i).toString()
+												.subSequence(0, textlength))) {
 							array_sort.add(array_pre.get(i));
 						}
 					}
 				}
-				if(textlength > 0){
+				if (textlength > 0) {
 					isFiltered = true;
 					updatePersonList(array_sort);
-				}else{
+				} else {
 					isFiltered = false;
-					updatePersonList(Model.fetchAll(Person.class));
+					// updatePersonList(Model.fetchAll(Person.class));
+					updatePersonList(getPeople());
 				}
 			}
 		});
+		listView = (ListView) tRoot.findViewById(android.R.id.list);
+		listView.setOnItemClickListener(this);
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
-		
-		if(!isFiltered){
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		if (!isFiltered) {
 			Person p = array_pre.get(arg2);
-			
-		}else{
+			((SecurityHelper) this.getActivity()).showPersonDetail(p.firstName);
+		} else {
 			Person p = array_sort.get(arg2);
-			
+			((SecurityHelper) this.getActivity()).showPersonDetail(p.firstName);
 		}
-		
-		
+
 	}
 
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-		
-	}
-	
-	
-	
-	
+	private class PersonAdapter extends ArrayAdapter<Person> {
 
+		private List<Person> data = new LinkedList<Person>();
+		private int layoutid;
+
+		public PersonAdapter(Context context, int resource, List<Person> objects) {
+			super(context, resource, objects);
+			layoutid = resource;
+			data = objects;
+
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if (convertView == null) {
+				LayoutInflater vi = (LayoutInflater) getActivity()
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				convertView = vi.inflate(layoutid, null);
+			}
+			Person p = data.get(position);
+			if (p != null) {
+				TextView action = (TextView) convertView
+						.findViewById(com.missionse.securityhelper.R.id.person_list_entry_name);
+				action.setText(p.toString());
+			}
+			return convertView;
+		}
+	}
 }
