@@ -6,18 +6,20 @@ import org.orman.mapper.annotation.PrimaryKey;
 
 @Entity
 public class CubeInfo extends Model<CubeInfo> {
-	
-	@PrimaryKey(autoIncrement=true)
+
+	@PrimaryKey(autoIncrement = true)
 	public int id;
 
 	public BuildingLocation buildingLocation;
-	
+
 	public String phoneNumber;
-	
+
 	public Person assignedPerson;
-	
-	public CubeInfo(){
-		//empty constructor for library
+
+	public String name;
+
+	public CubeInfo() {
+		// empty constructor for library
 	}
 
 }

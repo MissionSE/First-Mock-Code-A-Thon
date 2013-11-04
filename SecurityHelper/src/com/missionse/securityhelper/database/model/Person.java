@@ -9,39 +9,37 @@ import org.orman.mapper.annotation.PrimaryKey;
 
 @Entity
 public class Person extends Model<Person> {
-	
-	@PrimaryKey(autoIncrement=true)
+
+	@PrimaryKey(autoIncrement = true)
 	public int id;
-	
+
 	public String firstName;
-	
+
 	public String lastName;
-	
+
 	public String middleName;
-	
+
 	public boolean handicap;
-	
+
 	public CubeInfo cubeInfo;
-	
+
 	@OneToMany(toType = History.class, onField = "person")
-    public EntityList<Person, History> history = new EntityList(Person.class, History.class, this);
-	
+	public EntityList<Person, History> history = new EntityList(Person.class, History.class, this);
+
 	@ManyToOne
 	public BuildingLocation currentLocation;
-	
-	
-	
-	public Person(){
-		//emtpy constructor needed for library
+
+	public Person() {
+
 	}
-	
-	
+
 	@Override
-	public String toString(){
+	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(firstName + " ");
-		if(middleName != null && !middleName.equals(""))
+		if (middleName != null && !middleName.equals("")) {
 			sb.append(middleName + " ");
+		}
 		sb.append(lastName);
 		return sb.toString();
 	}
