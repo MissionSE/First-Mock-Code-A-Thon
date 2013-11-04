@@ -19,20 +19,15 @@
     <ListView 
         android:id="@+id/location_detail_exits"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/big_card">
     </ListView>
     
     <ListView 
         android:id="@+id/location_detail_people"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
-    
-        
-    <ListView
-        android:id="@+id/location_detail_history"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content"
+        android:background="@drawable/big_card">
     </ListView>
 
 </LinearLayout>
