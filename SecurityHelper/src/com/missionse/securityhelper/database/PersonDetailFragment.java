@@ -73,7 +73,7 @@ public class PersonDetailFragment extends Fragment {
 			History historyEntry = historyEntries.get(position);
 			if (historyEntry != null) {
 				TextView action = (TextView) convertView.findViewById(R.id.person_history_action);
-				action.setText(historyEntry.action.toString());
+				action.setText(historyEntry.personAction.toString());
 				TextView door = (TextView) convertView.findViewById(R.id.person_history_door);
 				door.setText(historyEntry.door.name);
 				TextView location = (TextView) convertView.findViewById(R.id.person_history_location);

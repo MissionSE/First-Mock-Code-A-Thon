@@ -5,6 +5,7 @@ import android.app.Application;
 import com.missionse.database.GenericDatabase;
 import com.missionse.securityhelper.database.model.BuildingLocation;
 import com.missionse.securityhelper.database.model.CubeInfo;
+import com.missionse.securityhelper.database.model.ExitDoor;
 import com.missionse.securityhelper.database.model.History;
 import com.missionse.securityhelper.database.model.Person;
 
@@ -17,7 +18,13 @@ public class SecurityHelperApplication extends Application {
 				"default.db", /* Database name */
 				1, /* Database version */
 				new Class<?>[] { /* Entity Classes */
-				BuildingLocation.class, CubeInfo.class, History.class, Person.class, });
+				BuildingLocation.class, CubeInfo.class, History.class, Person.class, ExitDoor.class });
+
+		populateDatabase();
+
+	}
+
+	public void populateDatabase() {
 
 	}
 
