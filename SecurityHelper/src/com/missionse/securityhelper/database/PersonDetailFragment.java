@@ -9,11 +9,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.missionse.securityhelper.R;
+import com.missionse.securityhelper.SecurityHelper;
 import com.missionse.securityhelper.database.model.BuildingLocation;
 import com.missionse.securityhelper.database.model.History;
 import com.missionse.securityhelper.database.model.HistoryAction;
@@ -88,6 +91,15 @@ public class PersonDetailFragment extends Fragment {
 
 		ListView listView = (ListView) contentView.findViewById(R.id.person_detail_history);
 		listView.setAdapter(new PersonHistoryAdapter(getActivity(), R.layout.person_history_entry, history));
+
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(final AdapterView<?> arg0, final View arg1, final int arg2, final long arg3) {
+				((SecurityHelper) PersonDetailFragment.this.getActivity()).showLocation("S-E Exit");
+			}
+
+		});
 	}
 
 	private class PersonHistoryAdapter extends ArrayAdapter<History> {

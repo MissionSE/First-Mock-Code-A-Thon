@@ -24,7 +24,6 @@ import com.missionse.securityhelper.database.model.Person;
 public class LocationDetailFragment extends Fragment {
 
 	private View contentView;
-	private BuildingLocation location;
 	private String locationDummy;
 
 	public LocationDetailFragment() {
@@ -37,56 +36,65 @@ public class LocationDetailFragment extends Fragment {
 	}
 
 	public void setLocation(final BuildingLocation location) {
-		this.location = location;
 	}
 
 	public void setLocation(final String location) {
 		locationDummy = location;
 	}
 
-	public void refresh() {
-		if (locationDummy.equals("CompassRoom")) {
-			// location.name = "Compass Room";
-			List<ExitDoor> exits = new ArrayList<ExitDoor>();
-			ExitDoor door1 = new ExitDoor();
-			door1.name = "N-E Exit";
-			ExitDoor door2 = new ExitDoor();
-			door2.name = "S-E Exit";
-			exits.add(door1);
-			exits.add(door2);
+	public void refresh(final SecurityHelper activity) {
+		// location.name = "Compass Room";
+		List<ExitDoor> exits = new ArrayList<ExitDoor>();
+		ExitDoor door1 = new ExitDoor();
+		door1.name = "N-E Exit";
+		ExitDoor door2 = new ExitDoor();
+		door2.name = "S-E Exit";
+		exits.add(door1);
+		exits.add(door2);
 
-			List<Person> peopleInLocation = new ArrayList<Person>();
+		List<Person> peopleInLocation = new ArrayList<Person>();
 
-			Person person1 = new Person();
-			person1.firstName = "Joe";
-			person1.middleName = "M.";
-			person1.lastName = "Smith";
-			Person person2 = new Person();
-			person2.firstName = "Jane";
-			person2.middleName = "F.";
-			person2.lastName = "Johnson";
+		Person person1 = new Person();
+		person1.firstName = "Joe";
+		person1.middleName = "M.";
+		person1.lastName = "Smith";
+		Person person2 = new Person();
+		person2.firstName = "Jane";
+		person2.middleName = "F.";
+		person2.lastName = "Johnson";
 
-			peopleInLocation.add(person1);
-			peopleInLocation.add(person2);
+		peopleInLocation.add(person1);
+		peopleInLocation.add(person2);
 
-			TextView textView = (TextView) contentView.findViewById(R.id.location_detail_name);
-			textView.setText("Compass Room");
+		TextView textView = (TextView) contentView.findViewById(R.id.location_detail_name);
+		textView.setText(locationDummy);
 
-			ListView exitsList = (ListView) contentView.findViewById(R.id.location_detail_exits);
+		ListView exitsList = (ListView) contentView.findViewById(R.id.location_detail_exits);
+		try {
+
 			exitsList.setAdapter(new ExitsListAdapter(getActivity(), R.layout.location_detail_exit_entry, exits));
 			exitsList.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
 				public void onItemClick(final AdapterView<?> arg0, final View arg1, final int arg2, final long arg3) {
-
 					((SecurityHelper) LocationDetailFragment.this.getActivity()).showExitDetail("C4Door");
-
 				}
 			});
 
 			ListView personList = (ListView) contentView.findViewById(R.id.location_detail_people);
 			personList.setAdapter(new PersonListAdapter(getActivity(), R.layout.location_detail_person_entry,
 					peopleInLocation));
+
+			personList.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(final AdapterView<?> arg0, final View arg1, final int arg2, final long arg3) {
+					((SecurityHelper) LocationDetailFragment.this.getActivity()).showPersonDetail("John");
+				}
+
+			});
+		} catch (Exception e) {
+			activity.showPersonList();
 		}
 
 	}

@@ -10,13 +10,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
@@ -34,15 +30,13 @@ public class PersonListFragment extends ListFragment {
 	private ListView listView;
 	private int textlength = 0;
 	private ArrayList<Person> array_sort = new ArrayList<Person>();
-	private List<Person> array_pre;
+	private static List<Person> array_pre;
 	private boolean isFiltered = false;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 
-		View lRootView = inflater.inflate(R.layout.fragment_person_list,
-				container, false);
+		View lRootView = inflater.inflate(R.layout.fragment_person_list, container, false);
 
 		initComponents(lRootView);
 
@@ -54,8 +48,7 @@ public class PersonListFragment extends ListFragment {
 	}
 
 	public static List<Person> getPeople() {
-		String[] fn = new String[] { "Roberto", "James", "Kyle", "Ron", "Mike",
-				"Eric" };
+		String[] fn = new String[] { "Roberto", "James", "Kyle", "Ron", "Mike", "Eric" };
 		List<Person> persons = new LinkedList<Person>();
 		Random r = new Random();
 		for (int x = 0; x < 20; x++) {
@@ -64,43 +57,36 @@ public class PersonListFragment extends ListFragment {
 			p.lastName = fn[r.nextInt(fn.length)];
 			persons.add(p);
 		}
+		array_pre = persons;
 		return persons;
 	}
 
-	private void updatePersonList(List<Person> persons) {
+	private void updatePersonList(final List<Person> persons) {
 
-		array_pre = persons;
-
-		ListAdapter l = new PersonAdapter(getActivity(),
-				R.layout.person_list_entry,
-				persons);
+		ListAdapter l = new PersonAdapter(getActivity(), R.layout.person_list_entry, persons);
 		setListAdapter(l);
 
 	}
 
-	private void initComponents(View tRoot) {
-		searchBox = (EditText) tRoot
-				.findViewById(R.id.person_list_searchtextbox);
+	private void initComponents(final View tRoot) {
+		searchBox = (EditText) tRoot.findViewById(R.id.person_list_searchtextbox);
 		searchBox.addTextChangedListener(new TextWatcher() {
-			public void afterTextChanged(Editable s) {
+			@Override
+			public void afterTextChanged(final Editable s) {
 			}
 
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
+			@Override
+			public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
 			}
 
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
+			@Override
+			public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
 				textlength = searchBox.getText().length();
 				array_sort.clear();
 				for (int i = 0; i < array_pre.size(); i++) {
 					if (textlength <= array_pre.get(i).toString().length()) {
-						if (searchBox
-								.getText()
-								.toString()
-								.equalsIgnoreCase(
-										(String) array_pre.get(i).toString()
-												.subSequence(0, textlength))) {
+						if (searchBox.getText().toString()
+								.equalsIgnoreCase((String) array_pre.get(i).toString().subSequence(0, textlength))) {
 							array_sort.add(array_pre.get(i));
 						}
 					}
@@ -116,11 +102,11 @@ public class PersonListFragment extends ListFragment {
 			}
 		});
 		listView = (ListView) tRoot.findViewById(android.R.id.list);
-		//listView.setOnItemClickListener(this);
+		// listView.setOnItemClickListener(this);
 	}
 
 	@Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
+	public void onListItemClick(final ListView l, final View v, final int position, final long id) {
 		if (!isFiltered) {
 			Person p = array_pre.get(position);
 			((SecurityHelper) this.getActivity()).showPersonDetail(p.firstName);
@@ -129,7 +115,6 @@ public class PersonListFragment extends ListFragment {
 			((SecurityHelper) this.getActivity()).showPersonDetail(p.firstName);
 		}
 
-
 	}
 
 	private class PersonAdapter extends ArrayAdapter<Person> {
@@ -137,7 +122,7 @@ public class PersonListFragment extends ListFragment {
 		private List<Person> data = new LinkedList<Person>();
 		private int layoutid;
 
-		public PersonAdapter(Context context, int resource, List<Person> objects) {
+		public PersonAdapter(final Context context, final int resource, final List<Person> objects) {
 			super(context, resource, objects);
 			layoutid = resource;
 			data = objects;
@@ -145,10 +130,9 @@ public class PersonListFragment extends ListFragment {
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, final ViewGroup parent) {
 			if (convertView == null) {
-				LayoutInflater vi = (LayoutInflater) getActivity()
-						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				convertView = vi.inflate(layoutid, null);
 			}
 			Person p = data.get(position);
@@ -161,5 +145,4 @@ public class PersonListFragment extends ListFragment {
 		}
 	}
 
-	
 }

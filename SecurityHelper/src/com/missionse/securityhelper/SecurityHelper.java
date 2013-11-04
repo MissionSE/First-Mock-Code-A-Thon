@@ -152,7 +152,7 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 
 		getFragmentManager().executePendingTransactions();
 
-		locationDetailFragment.refresh();
+		locationDetailFragment.refresh(this);
 	}
 
 	public void showExitDetail(final String exit) {
