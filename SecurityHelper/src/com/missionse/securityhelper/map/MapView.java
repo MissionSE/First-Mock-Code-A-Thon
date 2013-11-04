@@ -65,13 +65,17 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 		canvas.drawBitmap(mapImage, transformationMatrix, paint);
 
 		for (Rect location : locations) {
-			transformedLocation.set(
-					(int) (location.left * scale + xTranslation),
-					(int) (location.top * scale + yTranslation),
-					(int) (location.right * scale + xTranslation),
-					(int) (location.bottom * scale + yTranslation));
+			transformLocation(location, transformedLocation);
 			canvas.drawRect(transformedLocation, paint);
 		}
+	}
+
+	private void transformLocation(final Rect location, final Rect newLocation) {
+		newLocation.set(
+				(int) (location.left * scale + xTranslation),
+				(int) (location.top * scale + yTranslation),
+				(int) (location.right * scale + xTranslation),
+				(int) (location.bottom * scale + yTranslation));
 	}
 
 	@Override
@@ -79,37 +83,49 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 		scaleGestureDetector.onTouchEvent(event);
 		gestureDetector.onTouchEvent(event);
 
+		invalidate();
+
 		return true;
 	}
 
 	@Override
 	public boolean onScale(final ScaleGestureDetector detector) {
-		Log.e("MapView", "onScale");
 		scale *= detector.getScaleFactor();
-		invalidate();
 		return true;
 	}
 
 	@Override
 	public boolean onScaleBegin(final ScaleGestureDetector detector) {
-		Log.e("MapView", "onScaleBegin");
 		scaling = true;
 		return true;
 	}
 
 	@Override
 	public void onScaleEnd(final ScaleGestureDetector detector) {
-		Log.e("MapView", "onScaleEnd");
 		scaling = false;
 	}
 
 	@Override
 	public boolean onScroll(final MotionEvent e1, final MotionEvent e2, final float distanceX, final float distanceY) {
 		if (!scaling) {
-			Log.e("MapView", "onScroll");
 			xTranslation -= distanceX;
 			yTranslation -= distanceY;
-			invalidate();
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean onSingleTapUp(final MotionEvent e) {
+		Rect correctedLocation = new Rect();
+		int xTouch = (int) e.getX();
+		int yTouch = (int) e.getY();
+
+		for (Rect location : locations) {
+			transformLocation(location, correctedLocation);
+			if (correctedLocation.contains(xTouch, yTouch)) {
+				Log.e("MapView", "Collision!");
+			}
 		}
 
 		return true;
@@ -117,7 +133,6 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 
 	@Override
 	public boolean onDown(final MotionEvent e) {
-		Log.e("MapView", "onDown");
 		return true;
 	}
 
@@ -132,10 +147,5 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 
 	@Override
 	public void onShowPress(final MotionEvent e) {
-	}
-
-	@Override
-	public boolean onSingleTapUp(final MotionEvent e) {
-		return false;
 	}
 }
