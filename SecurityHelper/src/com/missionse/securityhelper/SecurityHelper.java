@@ -8,12 +8,18 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.missionse.securityhelper.database.DatabaseFragment;
+import com.missionse.securityhelper.database.LocationDetailFragment;
+import com.missionse.securityhelper.database.PersonDetailFragment;
+import com.missionse.securityhelper.database.PersonListFragment;
+import com.missionse.securityhelper.database.model.BuildingLocation;
+import com.missionse.securityhelper.database.model.Person;
 import com.missionse.securityhelper.map.MapFragment;
 
 public class SecurityHelper extends Activity {
 
-	private DatabaseFragment databaseFragment;
+	private PersonListFragment personListFragment;
+	private PersonDetailFragment personDetailFragment;
+	private LocationDetailFragment locationDetailFragment;
 	private MapFragment mapFragment;
 
 	@Override
@@ -25,7 +31,9 @@ public class SecurityHelper extends Activity {
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayShowTitleEnabled(false);
 
-		databaseFragment = new DatabaseFragment();
+		personListFragment = new PersonListFragment();
+		personDetailFragment = new PersonDetailFragment();
+
 		mapFragment = new MapFragment();
 
 		SecurityHelperTabListener databaseTabListener = new SecurityHelperTabListener(this, R.id.left_content);
@@ -37,11 +45,11 @@ public class SecurityHelper extends Activity {
 		actionBar.addTab(databaseTab);
 		actionBar.addTab(mapTab);
 
-		FragmentTransaction databaseTransaction = this.getFragmentManager().beginTransaction();
-		databaseTransaction.replace(R.id.left_content, databaseFragment);
+		FragmentTransaction databaseTransaction = getFragmentManager().beginTransaction();
+		databaseTransaction.replace(R.id.left_content, personListFragment);
 		databaseTransaction.commit();
 
-		FragmentTransaction mapTransaction = this.getFragmentManager().beginTransaction();
+		FragmentTransaction mapTransaction = getFragmentManager().beginTransaction();
 		mapTransaction.replace(R.id.right_content, mapFragment);
 		mapTransaction.commit();
 	}
@@ -60,5 +68,41 @@ public class SecurityHelper extends Activity {
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	public void showPersonList() {
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.left_content, personListFragment);
+		transaction.commit();
+
+		getFragmentManager().executePendingTransactions();
+	}
+
+	public void showPersonDetail(final Person person) {
+		personDetailFragment.setPerson(person);
+
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.left_content, personDetailFragment);
+		transaction.commit();
+
+		getFragmentManager().executePendingTransactions();
+
+		personDetailFragment.refresh();
+	}
+
+	public void showLocation(final BuildingLocation location) {
+		locationDetailFragment.setLocation(location);
+
+		FragmentTransaction leftTransaction = getFragmentManager().beginTransaction();
+		leftTransaction.replace(R.id.left_content, locationDetailFragment);
+		leftTransaction.commit();
+
+		// FragmentTransaction rightTransaction = getFragmentManager().beginTransaction();
+		// rightTransaction.replace(R.id.right_content, modelFragment);
+		// rightTransaction.commit();
+
+		getFragmentManager().executePendingTransactions();
+
+		locationDetailFragment.refresh();
 	}
 }
