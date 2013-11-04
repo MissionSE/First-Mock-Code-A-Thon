@@ -1,6 +1,6 @@
 package com.missionse.securityhelper.map;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -21,7 +21,8 @@ import com.missionse.securityhelper.SecurityHelper;
 
 public class MapView extends View implements GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener {
 	private Paint paint;
-	private Bitmap mapImage;
+	private Bitmap mapImage, cameraImage;
+	private Rect cameraRect;
 	private GestureDetector gestureDetector;
 	private ScaleGestureDetector scaleGestureDetector;
 
@@ -31,7 +32,7 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 	private float scale;
 	private float xTranslation, yTranslation;
 
-	private ArrayList<Rect> locations;
+	private HashMap<String, Rect> locations;
 
 	private SecurityHelper securityHelper;
 
@@ -43,6 +44,8 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 		paint.setStyle(Style.FILL);
 
 		mapImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.floor1);
+		cameraImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.camera_icon);
+		cameraRect = new Rect(0, 0, cameraImage.getWidth(), cameraImage.getHeight());
 
 		transformationMatrix = new Matrix();
 		xTranslation = 0.0f;
@@ -50,8 +53,10 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 		scale = 2.0f;
 
 		transformedLocation = new Rect();
-		locations = new ArrayList<Rect>();
-		locations.add(new Rect(10, 105, 135, 190));
+		locations = new HashMap<String, Rect>();
+		locations.put("CompassRoom", new Rect(10, 105, 135, 190));
+		locations.put("C4Door", new Rect(10, 815, 120, 870));
+		locations.put("Camera", new Rect(275, 95, 325, 160));
 
 		gestureDetector = new GestureDetector(context, this);
 		scaleGestureDetector = new ScaleGestureDetector(context, this);
@@ -68,10 +73,13 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 		transformationMatrix.postTranslate(xTranslation, yTranslation);
 		canvas.drawBitmap(mapImage, transformationMatrix, paint);
 
-		for (Rect location : locations) {
+		for (Rect location : locations.values()) {
 			transformLocation(location, transformedLocation);
 			canvas.drawRect(transformedLocation, paint);
 		}
+
+		transformLocation(locations.get("Camera"), transformedLocation);
+		canvas.drawBitmap(cameraImage, cameraRect, transformedLocation, paint);
 	}
 
 	private void transformLocation(final Rect location, final Rect newLocation) {
@@ -125,10 +133,16 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 		int xTouch = (int) e.getX();
 		int yTouch = (int) e.getY();
 
-		for (Rect location : locations) {
-			transformLocation(location, correctedLocation);
+		for (String location : locations.keySet()) {
+			transformLocation(locations.get(location), correctedLocation);
 			if (correctedLocation.contains(xTouch, yTouch)) {
-				securityHelper.showLocation("CompassRoom");
+				if (location.equals("CompassRoom")) {
+					securityHelper.showLocation(location);
+				} else if (location.equals("C4Door")) {
+					securityHelper.showExitDetail(location);
+				} else if (location.equals("Camera")) {
+//					securityHelper.showSecurityVideo(location);
+				}
 			}
 		}
 
