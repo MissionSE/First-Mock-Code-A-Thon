@@ -12,19 +12,22 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 
 import com.missionse.securityhelper.R;
 import com.missionse.securityhelper.database.model.Person;
 
-public class PersonListFragment extends ListFragment {
+public class PersonListFragment extends ListFragment implements OnItemSelectedListener {
 
 	//private List<Person> persons = new LinkedList<Person>();
 	private EditText searchBox;
 	private int textlength=0;
 	private ArrayList<Person> array_sort= new ArrayList<Person>();
 	private List<Person> array_pre;
+	private boolean isFiltered = false;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -35,6 +38,8 @@ public class PersonListFragment extends ListFragment {
 		initComponents(lRootView);
 
 		updatePersonList(Model.fetchAll(Person.class));
+		
+		//getListView().setOnItemSelectedListener(this);
 		
 		return lRootView;
 		
@@ -50,7 +55,7 @@ public class PersonListFragment extends ListFragment {
 				R.layout.fragment_person_list, R.id.person_list_entry_name,
 				persons);
 		setListAdapter(l);
-
+		
 	}
 
 	private void initComponents(View tRoot) {
@@ -78,9 +83,35 @@ public class PersonListFragment extends ListFragment {
 						}
 					}
 				}
-				updatePersonList(array_sort);
+				if(textlength > 0){
+					isFiltered = true;
+					updatePersonList(array_sort);
+				}else{
+					isFiltered = false;
+					updatePersonList(Model.fetchAll(Person.class));
+				}
 			}
 		});
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+			long arg3) {
+		
+		if(!isFiltered){
+			Person p = array_pre.get(arg2);
+			
+		}else{
+			Person p = array_sort.get(arg2);
+			
+		}
+		
+		
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		
 	}
 	
 	
