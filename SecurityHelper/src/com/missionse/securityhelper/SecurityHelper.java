@@ -52,7 +52,7 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		leftMenu.setShadowDrawable(R.drawable.shadow);
 		leftMenu.setBehindWidthRes(R.dimen.drawer_width);
 		leftMenu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
-		leftMenu.setMenu(R.layout.drawer_list);
+		leftMenu.setMenu(R.layout.nav_drawer);
 
 		rightMenu = new SlidingMenu(this);
 		rightMenu.setMode(SlidingMenu.RIGHT);
@@ -61,7 +61,7 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		rightMenu.setShadowDrawable(R.drawable.shadow);
 		rightMenu.setBehindWidthRes(R.dimen.drawer_width);
 		rightMenu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
-		rightMenu.setMenu(R.layout.nav_drawer);
+		rightMenu.setMenu(R.layout.nav_drawer_right);
 
 		FragmentTransaction databaseTransaction = getFragmentManager().beginTransaction();
 		databaseTransaction.replace(R.id.left_content, personListFragment);
@@ -83,7 +83,7 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		if (savedInstanceState == null) {
 			FragmentTransaction transaction = this.getFragmentManager().beginTransaction();
 			drawerFragment = new SecurityHelperRightDrawerFragment();
-			transaction.replace(R.id.menu_frame, drawerFragment);
+			transaction.replace(R.id.menu_frame_right, drawerFragment);
 			transaction.commit();
 		}
 	}
@@ -105,6 +105,9 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 	}
 
 	public void showPersonList() {
+		leftMenu.showContent();
+		rightMenu.showContent();
+
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.left_content, personListFragment);
 		transaction.commit();
@@ -165,6 +168,9 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 	}
 
 	public void showMap() {
+		leftMenu.showContent();
+		rightMenu.showContent();
+
 		FragmentTransaction leftTransaction = getFragmentManager().beginTransaction();
 		leftTransaction.replace(R.id.right_content, mapFragment);
 		leftTransaction.commit();
@@ -178,5 +184,10 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 			modelFragment.getAnimator().scaleTo(0.045f, 250);
 			modelFragment.getAnimator().rotateTo(-45f, 225f, 0f, 250);
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		showPersonList();
 	}
 }

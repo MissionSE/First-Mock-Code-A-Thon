@@ -36,7 +36,7 @@ public class SecurityHelperLeftDrawerFragment extends ListFragment {
 		SecurityHelper activity = (SecurityHelper) getActivity();
 
 		String selectedItem = (String) listView.getAdapter().getItem(position);
-		if (selectedItem.equals("PersonList")) {
+		if (selectedItem.equals("Person List")) {
 			activity.showPersonList();
 		}
 	}

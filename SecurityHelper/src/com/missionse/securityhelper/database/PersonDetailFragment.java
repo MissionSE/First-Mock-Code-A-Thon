@@ -44,52 +44,50 @@ public class PersonDetailFragment extends Fragment {
 	}
 
 	public void refresh() {
-		if (personDummy.equals("Roberto")) {
 
-			TextView textView = (TextView) contentView.findViewById(R.id.person_detail_name);
-			textView.setText("Roberto V.");
+		TextView textView = (TextView) contentView.findViewById(R.id.person_detail_name);
+		textView.setText(personDummy + " Smith");
 
-			textView = (TextView) contentView.findViewById(R.id.person_detail_number);
-			textView.setText("P: " + "856.345.3245");
+		textView = (TextView) contentView.findViewById(R.id.person_detail_number);
+		textView.setText("P: " + "856.345.3245");
 
-			textView = (TextView) contentView.findViewById(R.id.person_detail_current_location);
-			textView.setText("Current Location: " + "Lobby");
+		textView = (TextView) contentView.findViewById(R.id.person_detail_current_location);
+		textView.setText("Current Location: " + "Lobby");
 
-			textView = (TextView) contentView.findViewById(R.id.person_detail_cube_name);
-			textView.setText("Cube Number: " + "R-12B");
+		textView = (TextView) contentView.findViewById(R.id.person_detail_cube_name);
+		textView.setText("Cube Number: " + "R-12B");
 
-			textView = (TextView) contentView.findViewById(R.id.person_detail_cube_location);
-			textView.setText("Cube Location: " + "Radar");
+		textView = (TextView) contentView.findViewById(R.id.person_detail_cube_location);
+		textView.setText("Cube Location: " + "Radar");
 
-			List<History> history = new ArrayList<History>();
-			History hist1 = new History();
-			hist1.personAction = HistoryAction.ENTER_ROOM;
-			hist1.timestamp = 12344L;
-			BuildingLocation loc1 = new BuildingLocation();
-			loc1.name = "CND";
-			hist1.location = loc1;
+		List<History> history = new ArrayList<History>();
+		History hist1 = new History();
+		hist1.personAction = HistoryAction.ENTER_ROOM;
+		hist1.timestamp = 12344L;
+		BuildingLocation loc1 = new BuildingLocation();
+		loc1.name = "CND";
+		hist1.location = loc1;
 
-			History hist2 = new History();
-			hist2.personAction = HistoryAction.EXIT_ROOM;
-			hist2.timestamp = 12345L;
-			BuildingLocation loc2 = new BuildingLocation();
-			loc2.name = "Radar";
-			hist2.location = loc2;
+		History hist2 = new History();
+		hist2.personAction = HistoryAction.EXIT_ROOM;
+		hist2.timestamp = 12345L;
+		BuildingLocation loc2 = new BuildingLocation();
+		loc2.name = "Radar";
+		hist2.location = loc2;
 
-			History hist3 = new History();
-			hist3.personAction = HistoryAction.ENTER_ROOM;
-			hist3.timestamp = 12346L;
-			BuildingLocation loc3 = new BuildingLocation();
-			loc3.name = "Lobby";
-			hist3.location = loc3;
+		History hist3 = new History();
+		hist3.personAction = HistoryAction.ENTER_ROOM;
+		hist3.timestamp = 12346L;
+		BuildingLocation loc3 = new BuildingLocation();
+		loc3.name = "Lobby";
+		hist3.location = loc3;
 
-			history.add(hist1);
-			history.add(hist2);
-			history.add(hist3);
+		history.add(hist1);
+		history.add(hist2);
+		history.add(hist3);
 
-			ListView listView = (ListView) contentView.findViewById(R.id.person_detail_history);
-			listView.setAdapter(new PersonHistoryAdapter(getActivity(), R.layout.person_history_entry, history));
-		}
+		ListView listView = (ListView) contentView.findViewById(R.id.person_detail_history);
+		listView.setAdapter(new PersonHistoryAdapter(getActivity(), R.layout.person_history_entry, history));
 	}
 
 	private class PersonHistoryAdapter extends ArrayAdapter<History> {
@@ -113,12 +111,12 @@ public class PersonDetailFragment extends Fragment {
 				TextView action = (TextView) convertView.findViewById(R.id.person_history_action);
 				action.setText(historyEntry.personAction.toString());
 				TextView door = (TextView) convertView.findViewById(R.id.person_history_door);
-				//door.setText(historyEntry.door.name);
+				// door.setText(historyEntry.door.name);
 				door.setText("Exit 2A");
 				TextView location = (TextView) convertView.findViewById(R.id.person_history_location);
-				//location.setText(historyEntry.location.name);
+				// location.setText(historyEntry.location.name);
 				location.setText("Location: MSE Cafe");
-				
+
 			}
 			return convertView;
 		}
