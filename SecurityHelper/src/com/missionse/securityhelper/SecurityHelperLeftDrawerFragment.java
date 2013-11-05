@@ -28,6 +28,7 @@ public class SecurityHelperLeftDrawerFragment extends ListFragment {
 		final List<String> menuItems = new ArrayList<String>();
 		menuItems.add("Person Database");
 		menuItems.add("Reference Manuals");
+		menuItems.add("Evacuation Zones");
 
 		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.drawer_list_item, R.id.drawer_entry, menuItems));
 	}
@@ -41,6 +42,8 @@ public class SecurityHelperLeftDrawerFragment extends ListFragment {
 			activity.showPersonList();
 		} else if (selectedItem.equals("Reference Manuals")) {
 			activity.showReferenceManuals();
+		} else if (selectedItem.equals("Evacuation Zones")) {
+			activity.showEvacZones();
 		}
 	}
 }

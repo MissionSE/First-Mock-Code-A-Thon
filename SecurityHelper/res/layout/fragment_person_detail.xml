@@ -13,15 +13,21 @@
        <TextView
            android:id="@+id/person_detail_name"
            android:layout_width="match_parent"
-           android:layout_height="wrap_content" />
+           android:layout_height="wrap_content"
+           android:textAppearance="@style/Header2"
+           android:padding="20dp" />
        <TextView
            android:id="@+id/person_detail_number"
            android:layout_width="match_parent"
-           android:layout_height="wrap_content" /> 
+           android:layout_height="wrap_content"
+           android:textAppearance="@style/Header4"
+           android:padding="20dp" /> 
        <TextView
            android:id="@+id/person_detail_current_location"
            android:layout_width="match_parent"
-           android:layout_height="wrap_content" /> 
+           android:layout_height="wrap_content"
+           android:textAppearance="@style/Header4"
+           android:padding="20dp" /> 
     </LinearLayout>
     
     <LinearLayout 
@@ -33,11 +39,15 @@
        <TextView
            android:id="@+id/person_detail_cube_name"
            android:layout_width="match_parent"
-           android:layout_height="wrap_content" />
+           android:layout_height="wrap_content"
+           android:textAppearance="@style/Header4"
+           android:padding="20dp" />
        <TextView
            android:id="@+id/person_detail_cube_location"
            android:layout_width="match_parent"
-           android:layout_height="wrap_content" /> 
+           android:layout_height="wrap_content"
+           android:textAppearance="@style/Header4"
+           android:padding="20dp" /> 
     </LinearLayout>
     
     <ListView

@@ -352,4 +352,9 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		}
 
 	}
+
+	public void showEvacZones() {
+		leftMenu.showContent();
+		rightMenu.showContent();
+	}
 }
