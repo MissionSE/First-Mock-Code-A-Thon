@@ -23,7 +23,6 @@ import com.missionse.securityhelper.database.model.Person;
 public class LocationDetailFragment extends Fragment {
 
 	private View contentView;
-	private String locationDummy;
 
 	public LocationDetailFragment() {
 	}
@@ -55,7 +54,7 @@ public class LocationDetailFragment extends Fragment {
 		peopleInLocation.add(person2);
 
 		TextView textView = (TextView) contentView.findViewById(R.id.location_detail_name);
-		textView.setText(locationDummy);
+		textView.setText("C4 Exit");
 
 		ListView exitsList = (ListView) contentView.findViewById(R.id.location_detail_exits);
 
@@ -82,10 +81,6 @@ public class LocationDetailFragment extends Fragment {
 		});
 
 		return contentView;
-	}
-
-	public void refresh(final SecurityHelper activity) {
-
 	}
 
 	private class PersonListAdapter extends ArrayAdapter<Person> {

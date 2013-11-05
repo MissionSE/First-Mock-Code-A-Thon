@@ -2,6 +2,7 @@ package com.missionse.securityhelper.database;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -32,7 +33,16 @@ public class PersonDetailFragment extends Fragment {
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 		contentView = inflater.inflate(R.layout.fragment_person_detail, null);
-		personDummy = "John";
+
+		Random rand = new Random();
+		int index = rand.nextInt(2);
+
+		List<String> firstname = new ArrayList();
+		firstname.add("John");
+		firstname.add("Jane");
+		firstname.add("Ralph");
+
+		personDummy = firstname.get(index);
 		TextView textView = (TextView) contentView.findViewById(R.id.person_detail_name);
 		textView.setText(personDummy + " Smith");
 
@@ -81,7 +91,7 @@ public class PersonDetailFragment extends Fragment {
 
 			@Override
 			public void onItemClick(final AdapterView<?> arg0, final View arg1, final int arg2, final long arg3) {
-				((SecurityHelper) PersonDetailFragment.this.getActivity()).showLocation();
+				((SecurityHelper) getActivity()).showLocationOnly();
 			}
 
 		});

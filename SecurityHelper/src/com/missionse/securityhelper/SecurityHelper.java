@@ -1,5 +1,7 @@
 package com.missionse.securityhelper;
 
+import gl.scenegraph.MeshComponent;
+import system.ArActivity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -8,9 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.missionse.augmented.setups.BasicMultiSetup;
 import com.missionse.modelviewer.ModelViewerFragment;
 import com.missionse.modelviewer.ModelViewerFragmentFactory;
 import com.missionse.modelviewer.ObjectLoadedListener;
+import com.missionse.securityhelper.augmented.GenerateMeshComponents;
 import com.missionse.securityhelper.database.ExitDetailFragment;
 import com.missionse.securityhelper.database.LocationDetailFragment;
 import com.missionse.securityhelper.database.PersonDetailFragment;
@@ -159,8 +163,17 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		rightTransaction.commit();
 
 		getFragmentManager().executePendingTransactions();
+	}
 
-		locationDetailFragment.refresh(this);
+	public void showLocationOnly() {
+		leftMenu.showContent();
+		rightMenu.showContent();
+
+		FragmentTransaction leftTransaction = getFragmentManager().beginTransaction();
+		leftTransaction.replace(R.id.left_content, locationDetailFragment);
+		leftTransaction.commit();
+
+		getFragmentManager().executePendingTransactions();
 	}
 
 	public void showExitDetail() {
@@ -222,6 +235,12 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 	public void showNextLocationFinder() {
 		leftMenu.showContent();
 		rightMenu.showContent();
+
+		BasicMultiSetup setup = new BasicMultiSetup(false);
+		for (MeshComponent m : GenerateMeshComponents.getNextLocation(setup)) {
+			setup.addObject(m);
+		}
+		ArActivity.startWithSetup(this, setup);
 	}
 
 	public void showVisualAssetStatus() {

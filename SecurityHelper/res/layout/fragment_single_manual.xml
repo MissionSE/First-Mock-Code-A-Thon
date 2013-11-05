@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <LinearLayout 
+        android:id="@+id/single_manual_title_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/big_card"
+        android:orientation="vertical" >
+       <TextView
+           android:id="@+id/single_manual_name"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:textAppearance="@style/Header2"
+           android:text="How to Lockdown an A-12 Class Door" />
+    </LinearLayout>
+    
+    <ScrollView 
+        android:id="@+id/single_manual_content_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/big_card"
+        android:orientation="vertical" >
+       <TextView
+           android:id="@+id/single_man_content"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:textAppearance="@style/Header4"
+           android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ornare libero et elementum
+			lacinia. Aliquam nec convallis sapien. Ut dapibus tortor tincidunt auctor aliquet. Vivamus quis tellus sit
+			amet mauris dapibus sagittis ac sed lectus. Pellentesque commodo, risus quis facilisis facilisis, mi arcu
+			venenatis sem, vel gravida turpis massa vel lacus. Aenean ullamcorper ipsum sem, vel ornare ante scelerisque
+			in. Pellentesque fringilla purus eget justo vulputate, in volutpat ligula tincidunt.
+			Nunc vel congue est, gravida hendrerit magna. Donec at ante nec est fermentum feugiat non eu arcu. Duis eget sodales orci.
+			Maecenas non scelerisque urna, in dapibus metus. Nulla congue nunc odio, vel adipiscing libero mattis ut. Lorem ipsum dolor
+			sit amet, consectetur adipiscing elit. Cras risus elit, euismod quis magna vitae, fermentum egestas erat. Vestibulum quis
+			sodales lorem. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam vel erat
+			adipiscing, posuere massa id, imperdiet enim. Donec lobortis posuere ornare. 
+			Integer vestibulum orci vitae velit aliquet elementum. Donec ac malesuada neque. Nam imperdiet varius dolor vitae vehicula.
+			Quisque aliquam condimentum nisi in tempus. Donec ornare ultricies magna, non faucibus nisl eleifend ut. Integer
+			condimentum vestibulum egestas. Donec non ipsum et nisi volutpat venenatis sed fringilla sapien." />
+    </ScrollView>
+    
+
+</LinearLayout>
