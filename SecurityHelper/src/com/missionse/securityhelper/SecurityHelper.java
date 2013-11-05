@@ -209,14 +209,17 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 	public void showMap() {
 		leftMenu.showContent();
 		rightMenu.showContent();
+		if (!mapFragmentShowing) {
 
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.replace(R.id.right_content, mapFragment);
-		transaction.commit();
+			FragmentTransaction transaction = getFragmentManager().beginTransaction();
+			transaction.replace(R.id.right_content, mapFragment);
+			transaction.commit();
 
-		mapFragmentShowing = false;
+			mapFragmentShowing = true;
 
-		getFragmentManager().executePendingTransactions();
+			getFragmentManager().executePendingTransactions();
+		}
+
 	}
 
 	@Override
@@ -356,5 +359,8 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 	public void showEvacZones() {
 		leftMenu.showContent();
 		rightMenu.showContent();
+
+		// Intent intent = new Intent(this, MyLocationDemoActivity.class);
+		// startActivity(intent);
 	}
 }
