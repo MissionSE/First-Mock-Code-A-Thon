@@ -21,7 +21,7 @@ import android.view.Gravity;
 
 import com.missionse.augmented.components.MarkerObjectFactory;
 import com.missionse.augmented.setups.BasicMultiSetup;
-import com.missionse.augmentedreality.R;
+import com.missionse.securityhelper.R;
 import commands.Command;
 import commands.ui.CommandShowToast;
 import components.ProximitySensor;
