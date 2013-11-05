@@ -7,5 +7,12 @@
     <!-- Section titles for tab navigation -->
     <string name="floorplan">Floor Plan</string>
     <string name="database">Database</string>
+    
+    <string-array name="reference_manuals">
+        <item>How to Reset a B-Type Server</item>
+        <item>How to Lock Down the A12-Class Doors</item>
+        <item>How to Initiate Lockdown Protocol</item>
+        <item>Public Services Phone Numbers</item>
+    </string-array>
 
 </resources>
