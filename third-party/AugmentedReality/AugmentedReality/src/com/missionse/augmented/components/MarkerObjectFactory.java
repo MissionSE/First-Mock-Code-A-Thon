@@ -28,6 +28,8 @@ public class MarkerObjectFactory {
 					mFirstTime = false;
 					mObject = new Obj();
 					mObject.setComp(mMesh);
+					if(mObject != null && mMesh.getOnClickCommand()!= null)
+						mObject.setOnClickCommand(mMesh.getOnClickCommand());
 					tSetup.getWorld().add(mObject);
 				}
 				
