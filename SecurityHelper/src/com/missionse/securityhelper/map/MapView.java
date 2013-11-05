@@ -111,6 +111,7 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 
 	public void showPerson(final boolean show) {
 		showPerson = show;
+		invalidate();
 	}
 
 	@Override
@@ -123,7 +124,7 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 		canvas.drawBitmap(mapImage, transformationMatrix, paint);
 
 		for (String location : locations.keySet()) {
-			if (!location.equals("Camera") || !location.equals("Person")) {
+			if (!location.equals("Camera") && !location.equals("Person")) {
 				transformLocation(locations.get(location), transformedLocation);
 				paint.setColor(colors.get(location));
 				canvas.drawRect(transformedLocation, paint);
@@ -143,7 +144,7 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 
 		if (showPerson) {
 			transformLocation(locations.get("Person"), transformedLocation);
-			canvas.drawBitmap(personImage, personRect,  transformedLocation, paint);
+			canvas.drawBitmap(personImage, personRect, transformedLocation, paint);
 		}
 	}
 

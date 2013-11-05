@@ -32,6 +32,7 @@ public class SecurityHelperRightDrawerFragment extends ListFragment {
 		menuItems.add("Flashlight");
 		menuItems.add("Next Location Finder");
 		menuItems.add("Visual Asset Status");
+		menuItems.add("Visual Server Status");
 
 		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.drawer_list_item, R.id.drawer_entry, menuItems));
 	}
@@ -53,6 +54,8 @@ public class SecurityHelperRightDrawerFragment extends ListFragment {
 			activity.showNextLocationFinder();
 		} else if (selectedItem.equals("Visual Asset Status")) {
 			activity.showVisualAssetStatus();
+		} else if (selectedItem.equals("Visual Server Status")) {
+			activity.showServerStatus();
 		}
 	}
 }

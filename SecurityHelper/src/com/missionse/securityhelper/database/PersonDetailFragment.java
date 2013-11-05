@@ -9,6 +9,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -51,6 +52,14 @@ public class PersonDetailFragment extends Fragment {
 
 		textView = (TextView) contentView.findViewById(R.id.person_detail_current_location);
 		textView.setText("Current Location: " + "Lobby");
+		textView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(final View v) {
+				((SecurityHelper) getActivity()).togglePersonIcon();
+			}
+
+		});
 
 		textView = (TextView) contentView.findViewById(R.id.person_detail_cube_name);
 		textView.setText("Cube Number: " + "R-12B");

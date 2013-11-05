@@ -1,5 +1,6 @@
 package com.missionse.securityhelper;
 
+import gl.MarkerObject;
 import gl.scenegraph.MeshComponent;
 import system.ArActivity;
 import android.app.Activity;
@@ -34,6 +35,8 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 	static final int TAKE_SECURITY_PICTURE = 1234;
 
 	private boolean flashlightOn = false;
+	private boolean showingPersonIcon = false;
+	private boolean mapFragmentShowing = false;
 
 	private PersonListFragment personListFragment;
 	private PersonDetailFragment personDetailFragment;
@@ -94,6 +97,7 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		FragmentTransaction mapTransaction = getFragmentManager().beginTransaction();
 		mapTransaction.replace(R.id.right_content, mapFragment);
 		mapTransaction.commit();
+		mapFragmentShowing = true;
 
 		Fragment leftDrawerFragment;
 		if (savedInstanceState == null) {
@@ -158,6 +162,8 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		transaction.replace(R.id.right_content, videoFragment).addToBackStack("video");
 		transaction.commit();
 
+		mapFragmentShowing = false;
+
 		getFragmentManager().executePendingTransactions();
 	}
 
@@ -172,6 +178,8 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		FragmentTransaction rightTransaction = getFragmentManager().beginTransaction();
 		rightTransaction.replace(R.id.right_content, modelFragment).addToBackStack("model");
 		rightTransaction.commit();
+
+		mapFragmentShowing = false;
 
 		getFragmentManager().executePendingTransactions();
 	}
@@ -205,6 +213,8 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.right_content, mapFragment);
 		transaction.commit();
+
+		mapFragmentShowing = false;
 
 		getFragmentManager().executePendingTransactions();
 	}
@@ -255,6 +265,8 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 				transaction.replace(R.id.right_content, pictureFragment).addToBackStack("singleman");
 				transaction.commit();
 
+				mapFragmentShowing = false;
+
 				getFragmentManager().executePendingTransactions();
 
 				pictureFragment.setImageBitmap(mImageBitmap);
@@ -296,6 +308,23 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 	public void showVisualAssetStatus() {
 		leftMenu.showContent();
 		rightMenu.showContent();
+
+		BasicMultiSetup setup = new BasicMultiSetup(false);
+		for (MeshComponent m : GenerateMeshComponents.getRandomDots(setup)) {
+			setup.addObject(m);
+		}
+		ArActivity.startWithSetup(this, setup);
+	}
+
+	public void showServerStatus() {
+		leftMenu.showContent();
+		rightMenu.showContent();
+
+		BasicMultiSetup setup = new BasicMultiSetup(false);
+		for (MarkerObject m : GenerateMeshComponents.getServerInfo(setup)) {
+			setup.addMarker(m);
+		}
+		ArActivity.startWithSetup(this, setup);
 	}
 
 	public void showSingleManual() {
@@ -306,6 +335,21 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		transaction.replace(R.id.right_content, singleManualFragment).addToBackStack("singleman");
 		transaction.commit();
 
+		mapFragmentShowing = false;
+
 		getFragmentManager().executePendingTransactions();
+	}
+
+	public void togglePersonIcon() {
+		if (mapFragmentShowing) {
+			if (showingPersonIcon) {
+				mapFragment.hidePerson();
+				showingPersonIcon = false;
+			} else {
+				mapFragment.showPerson();
+				showingPersonIcon = true;
+			}
+		}
+
 	}
 }
