@@ -1,5 +1,6 @@
 package com.missionse.securityhelper.map;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -15,6 +16,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.Toast;
 
 import com.missionse.securityhelper.R;
 import com.missionse.securityhelper.SecurityHelper;
@@ -34,6 +36,12 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 	private float xTranslation, yTranslation;
 
 	private HashMap<String, Rect> locations;
+	private HashMap<String, Integer> colors;
+	private Integer locationColor, emergencyColor;
+	private int serverUp, serverDown;
+
+	private boolean showEmergencyRoute;
+	private ArrayList<Rect> emergencyRoutes;
 
 	private SecurityHelper securityHelper;
 
@@ -43,6 +51,11 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 		paint.setColor(Color.argb(200, 0, 125, 125));
 		paint.setStrokeWidth(15);
 		paint.setStyle(Style.FILL);
+
+		locationColor = Color.argb(200, 0, 125, 125);
+		emergencyColor = Color.argb(200, 255, 0, 0);
+		serverUp = Color.argb(255, 0, 255, 0);
+		serverDown = Color.argb(255, 255, 0, 0);
 
 		mapImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.floor1);
 		cameraImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.camera_icon);
@@ -58,6 +71,29 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 		locations.put("CompassRoom", new Rect(10, 105, 135, 190));
 		locations.put("C4Door", new Rect(10, 815, 120, 870));
 		locations.put("Camera", new Rect(275, 95, 325, 160));
+		locations.put("Emergency", new Rect(550, 675, 680, 730));
+		locations.put("Server1", new Rect(554, 810, 568, 830));
+		locations.put("Server2", new Rect(568, 810, 582, 830));
+		locations.put("Server3", new Rect(582, 810, 615, 830));
+		locations.put("Server4", new Rect(554, 850, 615, 870));
+
+		colors = new HashMap<String, Integer>();
+		colors.put("CompassRoom", locationColor);
+		colors.put("C4Door", locationColor);
+		colors.put("Camera", locationColor);
+		colors.put("Emergency", emergencyColor);
+		colors.put("Server1", serverUp);
+		colors.put("Server2", serverDown);
+		colors.put("Server3", serverUp);
+		colors.put("Server4", serverUp);
+
+		showEmergencyRoute = false;
+		emergencyRoutes = new ArrayList<Rect>();
+		// left top right bottom
+		emergencyRoutes.add(new Rect(210, 730, 575, 770));
+		emergencyRoutes.add(new Rect(210, 730, 240, 895));
+		emergencyRoutes.add(new Rect(100, 870, 240, 895));
+		emergencyRoutes.add(new Rect(10, 845, 120, 870));
 
 		gestureDetector = new GestureDetector(context, this);
 		scaleGestureDetector = new ScaleGestureDetector(context, this);
@@ -74,9 +110,18 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 		transformationMatrix.postTranslate(xTranslation, yTranslation);
 		canvas.drawBitmap(mapImage, transformationMatrix, paint);
 
-		for (Rect location : locations.values()) {
-			transformLocation(location, transformedLocation);
+		for (String location : locations.keySet()) {
+			transformLocation(locations.get(location), transformedLocation);
+			paint.setColor(colors.get(location));
 			canvas.drawRect(transformedLocation, paint);
+		}
+
+		if (showEmergencyRoute) {
+			for (Rect route : emergencyRoutes) {
+				transformLocation(route, transformedLocation);
+				paint.setColor(emergencyColor);
+				canvas.drawRect(transformedLocation, paint);
+			}
 		}
 
 		transformLocation(locations.get("Camera"), transformedLocation);
@@ -140,6 +185,11 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 					securityHelper.showExitDetail();
 				} else if (location.equals("Camera")) {
 					securityHelper.showSecurityVideo();
+				} else if (location.equals("Emergency")) {
+					Toast.makeText(getContext(), "Fire! (Error Code: 06)", Toast.LENGTH_SHORT).show();
+					showEmergencyRoute = !showEmergencyRoute;
+				} else if (location.equals("Server2")) {
+					Toast.makeText(getContext(), "Server overheated! (Error Code: 041)", Toast.LENGTH_SHORT).show();
 				}
 			}
 		}
