@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.missionse.securityhelper.R;
 import com.missionse.securityhelper.SecurityHelper;
-import com.missionse.securityhelper.database.model.BuildingLocation;
 import com.missionse.securityhelper.database.model.ExitDoor;
 import com.missionse.securityhelper.database.model.Person;
 
@@ -32,18 +31,7 @@ public class LocationDetailFragment extends Fragment {
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 		contentView = inflater.inflate(R.layout.fragment_location_detail, null);
-		return contentView;
-	}
 
-	public void setLocation(final BuildingLocation location) {
-	}
-
-	public void setLocation(final String location) {
-		locationDummy = location;
-	}
-
-	public void refresh(final SecurityHelper activity) {
-		// location.name = "Compass Room";
 		List<ExitDoor> exits = new ArrayList<ExitDoor>();
 		ExitDoor door1 = new ExitDoor();
 		door1.name = "N-E Exit";
@@ -70,32 +58,33 @@ public class LocationDetailFragment extends Fragment {
 		textView.setText(locationDummy);
 
 		ListView exitsList = (ListView) contentView.findViewById(R.id.location_detail_exits);
-		try {
 
-			exitsList.setAdapter(new ExitsListAdapter(getActivity(), R.layout.location_detail_exit_entry, exits));
-			exitsList.setOnItemClickListener(new OnItemClickListener() {
+		exitsList.setAdapter(new ExitsListAdapter(getActivity(), R.layout.location_detail_exit_entry, exits));
+		exitsList.setOnItemClickListener(new OnItemClickListener() {
 
-				@Override
-				public void onItemClick(final AdapterView<?> arg0, final View arg1, final int arg2, final long arg3) {
-					((SecurityHelper) LocationDetailFragment.this.getActivity()).showExitDetail("C4Door");
-				}
-			});
+			@Override
+			public void onItemClick(final AdapterView<?> arg0, final View arg1, final int arg2, final long arg3) {
+				((SecurityHelper) LocationDetailFragment.this.getActivity()).showExitDetail();
+			}
+		});
 
-			ListView personList = (ListView) contentView.findViewById(R.id.location_detail_people);
-			personList.setAdapter(new PersonListAdapter(getActivity(), R.layout.location_detail_person_entry,
-					peopleInLocation));
+		ListView personList = (ListView) contentView.findViewById(R.id.location_detail_people);
+		personList.setAdapter(new PersonListAdapter(getActivity(), R.layout.location_detail_person_entry,
+				peopleInLocation));
 
-			personList.setOnItemClickListener(new OnItemClickListener() {
+		personList.setOnItemClickListener(new OnItemClickListener() {
 
-				@Override
-				public void onItemClick(final AdapterView<?> arg0, final View arg1, final int arg2, final long arg3) {
-					((SecurityHelper) LocationDetailFragment.this.getActivity()).showPersonDetail("John");
-				}
+			@Override
+			public void onItemClick(final AdapterView<?> arg0, final View arg1, final int arg2, final long arg3) {
+				((SecurityHelper) LocationDetailFragment.this.getActivity()).showPersonDetail();
+			}
 
-			});
-		} catch (Exception e) {
-			activity.showPersonList();
-		}
+		});
+
+		return contentView;
+	}
+
+	public void refresh(final SecurityHelper activity) {
 
 	}
 

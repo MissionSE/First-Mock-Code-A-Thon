@@ -109,10 +109,10 @@ public class PersonListFragment extends ListFragment {
 	public void onListItemClick(final ListView l, final View v, final int position, final long id) {
 		if (!isFiltered) {
 			Person p = array_pre.get(position);
-			((SecurityHelper) this.getActivity()).showPersonDetail(p.firstName);
+			((SecurityHelper) this.getActivity()).showPersonDetail();
 		} else {
 			Person p = array_sort.get(position);
-			((SecurityHelper) this.getActivity()).showPersonDetail(p.firstName);
+			((SecurityHelper) this.getActivity()).showPersonDetail();
 		}
 
 	}

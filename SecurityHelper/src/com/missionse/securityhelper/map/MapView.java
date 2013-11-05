@@ -19,7 +19,8 @@ import android.view.View;
 import com.missionse.securityhelper.R;
 import com.missionse.securityhelper.SecurityHelper;
 
-public class MapView extends View implements GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener {
+public class MapView extends View implements GestureDetector.OnGestureListener,
+		ScaleGestureDetector.OnScaleGestureListener {
 	private Paint paint;
 	private Bitmap mapImage, cameraImage;
 	private Rect cameraRect;
@@ -83,11 +84,8 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 	}
 
 	private void transformLocation(final Rect location, final Rect newLocation) {
-		newLocation.set(
-				(int) (location.left * scale + xTranslation),
-				(int) (location.top * scale + yTranslation),
-				(int) (location.right * scale + xTranslation),
-				(int) (location.bottom * scale + yTranslation));
+		newLocation.set((int) (location.left * scale + xTranslation), (int) (location.top * scale + yTranslation),
+				(int) (location.right * scale + xTranslation), (int) (location.bottom * scale + yTranslation));
 	}
 
 	@Override
@@ -137,11 +135,11 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 			transformLocation(locations.get(location), correctedLocation);
 			if (correctedLocation.contains(xTouch, yTouch)) {
 				if (location.equals("CompassRoom")) {
-					securityHelper.showLocation(location);
+					securityHelper.showLocation();
 				} else if (location.equals("C4Door")) {
-					securityHelper.showExitDetail(location);
+					securityHelper.showExitDetail();
 				} else if (location.equals("Camera")) {
-					securityHelper.showSecurityVideo(location);
+					securityHelper.showSecurityVideo();
 				}
 			}
 		}

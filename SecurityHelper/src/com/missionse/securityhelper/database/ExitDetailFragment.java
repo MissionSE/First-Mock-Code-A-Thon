@@ -32,14 +32,7 @@ public class ExitDetailFragment extends Fragment {
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 		contentView = inflater.inflate(R.layout.fragment_exit_detail, null);
-		return contentView;
-	}
 
-	public void setExit(final String exit) {
-
-	}
-
-	public void refresh() {
 		TextView textView = (TextView) contentView.findViewById(R.id.exit_detail_name);
 		textView.setText("C4 Door");
 
@@ -66,6 +59,7 @@ public class ExitDetailFragment extends Fragment {
 		ListView historyList = (ListView) contentView.findViewById(R.id.exit_detail_history);
 		historyList.setAdapter(new ExitHistoryAdapter(getActivity(), R.layout.exit_history_entry, history));
 
+		return contentView;
 	}
 
 	private class ExitHistoryAdapter extends ArrayAdapter<DoorHistory> {

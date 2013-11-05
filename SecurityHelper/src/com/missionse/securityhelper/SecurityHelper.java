@@ -15,7 +15,6 @@ import com.missionse.securityhelper.database.ExitDetailFragment;
 import com.missionse.securityhelper.database.LocationDetailFragment;
 import com.missionse.securityhelper.database.PersonDetailFragment;
 import com.missionse.securityhelper.database.PersonListFragment;
-import com.missionse.securityhelper.database.model.Person;
 import com.missionse.securityhelper.map.MapFragment;
 import com.missionse.securityhelper.video.VideoFragment;
 
@@ -53,7 +52,7 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		leftMenu.setMode(SlidingMenu.LEFT);
 		leftMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		leftMenu.setShadowWidthRes(R.dimen.drawer_shadow_width);
-		leftMenu.setShadowDrawable(R.drawable.shadow);
+		leftMenu.setShadowDrawable(R.drawable.shadow_left);
 		leftMenu.setBehindWidthRes(R.dimen.drawer_width);
 		leftMenu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
 		leftMenu.setMenu(R.layout.nav_drawer);
@@ -62,7 +61,7 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		rightMenu.setMode(SlidingMenu.RIGHT);
 		rightMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		rightMenu.setShadowWidthRes(R.dimen.drawer_shadow_width);
-		rightMenu.setShadowDrawable(R.drawable.shadow);
+		rightMenu.setShadowDrawable(R.drawable.shadow_right);
 		rightMenu.setBehindWidthRes(R.dimen.drawer_width);
 		rightMenu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
 		rightMenu.setMenu(R.layout.nav_drawer_right);
@@ -83,11 +82,11 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 			transaction.commit();
 		}
 
-		Fragment drawerFragment;
+		Fragment rightDrawerFragment;
 		if (savedInstanceState == null) {
 			FragmentTransaction transaction = this.getFragmentManager().beginTransaction();
-			drawerFragment = new SecurityHelperRightDrawerFragment();
-			transaction.replace(R.id.menu_frame_right, drawerFragment);
+			rightDrawerFragment = new SecurityHelperRightDrawerFragment();
+			transaction.replace(R.id.menu_frame_right, rightDrawerFragment);
 			transaction.commit();
 		}
 	}
@@ -119,31 +118,21 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		getFragmentManager().executePendingTransactions();
 	}
 
-	public void showPersonDetail(final Person person) {
-		personDetailFragment.setPerson(person);
+	public void showPersonDetail() {
+		leftMenu.showContent();
+		rightMenu.showContent();
 
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.left_content, personDetailFragment);
 		transaction.commit();
 
 		getFragmentManager().executePendingTransactions();
-
-		personDetailFragment.refresh();
 	}
 
-	public void showPersonDetail(final String person) {
-		personDetailFragment.setPerson(person);
+	public void showSecurityVideo() {
+		leftMenu.showContent();
+		rightMenu.showContent();
 
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.replace(R.id.left_content, personDetailFragment);
-		transaction.commit();
-
-		getFragmentManager().executePendingTransactions();
-
-		personDetailFragment.refresh();
-	}
-
-	public void showSecurityVideo(final String location) {
 		FragmentTransaction rightTransaction = getFragmentManager().beginTransaction();
 		rightTransaction.replace(R.id.right_content, videoFragment);
 		rightTransaction.commit();
@@ -151,8 +140,9 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		getFragmentManager().executePendingTransactions();
 	}
 
-	public void showLocation(final String location) {
-		locationDetailFragment.setLocation(location);
+	public void showLocation() {
+		leftMenu.showContent();
+		rightMenu.showContent();
 
 		FragmentTransaction leftTransaction = getFragmentManager().beginTransaction();
 		leftTransaction.replace(R.id.left_content, locationDetailFragment);
@@ -167,19 +157,21 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		locationDetailFragment.refresh(this);
 	}
 
-	public void showExitDetail(final String exit) {
-		exitDetailFragment.setExit(exit);
+	public void showExitDetail() {
+		leftMenu.showContent();
+		rightMenu.showContent();
 
 		FragmentTransaction leftTransaction = getFragmentManager().beginTransaction();
 		leftTransaction.replace(R.id.left_content, exitDetailFragment);
 		leftTransaction.commit();
 
 		getFragmentManager().executePendingTransactions();
-
-		exitDetailFragment.refresh();
 	}
 
 	public void showMap() {
+		leftMenu.showContent();
+		rightMenu.showContent();
+
 		leftMenu.showContent();
 		rightMenu.showContent();
 
@@ -200,6 +192,31 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 
 	@Override
 	public void onBackPressed() {
-		showPersonList();
+		// showPersonList();
+	}
+
+	public void showReferenceManuals() {
+		leftMenu.showContent();
+		rightMenu.showContent();
+	}
+
+	public void showCamera() {
+		leftMenu.showContent();
+		rightMenu.showContent();
+	}
+
+	public void showFlashlight() {
+		leftMenu.showContent();
+		rightMenu.showContent();
+	}
+
+	public void showNextLocationFinder() {
+		leftMenu.showContent();
+		rightMenu.showContent();
+	}
+
+	public void showVisualAssetStatus() {
+		leftMenu.showContent();
+		rightMenu.showContent();
 	}
 }

@@ -27,6 +27,11 @@ public class SecurityHelperRightDrawerFragment extends ListFragment {
 	private void createMenu() {
 		final List<String> menuItems = new ArrayList<String>();
 		menuItems.add("Map");
+		menuItems.add("Camera");
+		menuItems.add("Camera Feed");
+		menuItems.add("Flashlight");
+		menuItems.add("Next Location Finder");
+		menuItems.add("Visual Asset Status");
 
 		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.drawer_list_item, R.id.drawer_entry, menuItems));
 	}
@@ -38,6 +43,16 @@ public class SecurityHelperRightDrawerFragment extends ListFragment {
 		String selectedItem = (String) listView.getAdapter().getItem(position);
 		if (selectedItem.equals("Map")) {
 			activity.showMap();
+		} else if (selectedItem.equals("Camera")) {
+			activity.showCamera();
+		} else if (selectedItem.equals("Camera Feed")) {
+			activity.showSecurityVideo();
+		} else if (selectedItem.equals("Flashlight")) {
+			activity.showFlashlight();
+		} else if (selectedItem.equals("Next Location Finder")) {
+			activity.showNextLocationFinder();
+		} else if (selectedItem.equals("Visual Asset Status")) {
+			activity.showVisualAssetStatus();
 		}
 	}
 }

@@ -20,12 +20,10 @@ import com.missionse.securityhelper.SecurityHelper;
 import com.missionse.securityhelper.database.model.BuildingLocation;
 import com.missionse.securityhelper.database.model.History;
 import com.missionse.securityhelper.database.model.HistoryAction;
-import com.missionse.securityhelper.database.model.Person;
 
 public class PersonDetailFragment extends Fragment {
 
 	private View contentView;
-	private Person person;
 	private String personDummy;
 
 	public PersonDetailFragment() {
@@ -34,20 +32,7 @@ public class PersonDetailFragment extends Fragment {
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 		contentView = inflater.inflate(R.layout.fragment_person_detail, null);
-		refresh();
-		return contentView;
-	}
-
-	public void setPerson(final Person person) {
-		this.person = person;
-	}
-
-	public void setPerson(final String personName) {
-		personDummy = personName;
-	}
-
-	public void refresh() {
-
+		personDummy = "John";
 		TextView textView = (TextView) contentView.findViewById(R.id.person_detail_name);
 		textView.setText(personDummy + " Smith");
 
@@ -96,10 +81,11 @@ public class PersonDetailFragment extends Fragment {
 
 			@Override
 			public void onItemClick(final AdapterView<?> arg0, final View arg1, final int arg2, final long arg3) {
-				((SecurityHelper) PersonDetailFragment.this.getActivity()).showLocation("S-E Exit");
+				((SecurityHelper) PersonDetailFragment.this.getActivity()).showLocation();
 			}
 
 		});
+		return contentView;
 	}
 
 	private class PersonHistoryAdapter extends ArrayAdapter<History> {

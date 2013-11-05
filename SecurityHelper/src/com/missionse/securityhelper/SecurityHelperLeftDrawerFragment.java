@@ -26,7 +26,8 @@ public class SecurityHelperLeftDrawerFragment extends ListFragment {
 
 	private void createMenu() {
 		final List<String> menuItems = new ArrayList<String>();
-		menuItems.add("Person List");
+		menuItems.add("Person Database");
+		menuItems.add("Reference Manuals");
 
 		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.drawer_list_item, R.id.drawer_entry, menuItems));
 	}
@@ -36,8 +37,10 @@ public class SecurityHelperLeftDrawerFragment extends ListFragment {
 		SecurityHelper activity = (SecurityHelper) getActivity();
 
 		String selectedItem = (String) listView.getAdapter().getItem(position);
-		if (selectedItem.equals("Person List")) {
+		if (selectedItem.equals("Person Database")) {
 			activity.showPersonList();
+		} else if (selectedItem.equals("Reference Manuals")) {
+			activity.showReferenceManuals();
 		}
 	}
 }
