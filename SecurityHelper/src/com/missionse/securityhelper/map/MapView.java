@@ -24,8 +24,8 @@ import com.missionse.securityhelper.SecurityHelper;
 public class MapView extends View implements GestureDetector.OnGestureListener,
 		ScaleGestureDetector.OnScaleGestureListener {
 	private Paint paint;
-	private Bitmap mapImage, cameraImage;
-	private Rect cameraRect;
+	private Bitmap mapImage, cameraImage, personImage;
+	private Rect cameraRect, personRect;
 	private GestureDetector gestureDetector;
 	private ScaleGestureDetector scaleGestureDetector;
 
@@ -43,6 +43,8 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 	private boolean showEmergencyRoute;
 	private ArrayList<Rect> emergencyRoutes;
 
+	private boolean showPerson;
+
 	private SecurityHelper securityHelper;
 
 	public MapView(final Activity context) {
@@ -59,18 +61,24 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 
 		mapImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.floor1);
 		cameraImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.camera_icon);
+		personImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.person_icon);
 		cameraRect = new Rect(0, 0, cameraImage.getWidth(), cameraImage.getHeight());
+		personRect = new Rect(0, 0, personImage.getWidth(), personImage.getHeight());
+
+		showPerson = false;
 
 		transformationMatrix = new Matrix();
 		xTranslation = 0.0f;
 		yTranslation = 0.0f;
 		scale = 2.0f;
+		transformationMatrix.setScale(scale, scale);
 
 		transformedLocation = new Rect();
 		locations = new HashMap<String, Rect>();
 		locations.put("CompassRoom", new Rect(10, 105, 135, 190));
 		locations.put("C4Door", new Rect(10, 815, 120, 870));
-		locations.put("Camera", new Rect(275, 95, 325, 160));
+		locations.put("Camera", new Rect(275, 95, 325, 145));
+		locations.put("Person", new Rect(325, 180, 375, 230));
 		locations.put("Emergency", new Rect(550, 675, 680, 730));
 		locations.put("Server1", new Rect(554, 810, 568, 830));
 		locations.put("Server2", new Rect(568, 810, 582, 830));
@@ -81,6 +89,7 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 		colors.put("CompassRoom", locationColor);
 		colors.put("C4Door", locationColor);
 		colors.put("Camera", locationColor);
+		colors.put("Person", locationColor);
 		colors.put("Emergency", emergencyColor);
 		colors.put("Server1", serverUp);
 		colors.put("Server2", serverDown);
@@ -89,7 +98,6 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 
 		showEmergencyRoute = false;
 		emergencyRoutes = new ArrayList<Rect>();
-		// left top right bottom
 		emergencyRoutes.add(new Rect(210, 730, 575, 770));
 		emergencyRoutes.add(new Rect(210, 730, 240, 895));
 		emergencyRoutes.add(new Rect(100, 870, 240, 895));
@@ -99,6 +107,10 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 		scaleGestureDetector = new ScaleGestureDetector(context, this);
 
 		securityHelper = (SecurityHelper) context;
+	}
+
+	public void showPerson(final boolean show) {
+		showPerson = show;
 	}
 
 	@Override
@@ -111,9 +123,11 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 		canvas.drawBitmap(mapImage, transformationMatrix, paint);
 
 		for (String location : locations.keySet()) {
-			transformLocation(locations.get(location), transformedLocation);
-			paint.setColor(colors.get(location));
-			canvas.drawRect(transformedLocation, paint);
+			if (!location.equals("Camera") || !location.equals("Person")) {
+				transformLocation(locations.get(location), transformedLocation);
+				paint.setColor(colors.get(location));
+				canvas.drawRect(transformedLocation, paint);
+			}
 		}
 
 		if (showEmergencyRoute) {
@@ -126,6 +140,11 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 
 		transformLocation(locations.get("Camera"), transformedLocation);
 		canvas.drawBitmap(cameraImage, cameraRect, transformedLocation, paint);
+
+		if (showPerson) {
+			transformLocation(locations.get("Person"), transformedLocation);
+			canvas.drawBitmap(personImage, personRect,  transformedLocation, paint);
+		}
 	}
 
 	private void transformLocation(final Rect location, final Rect newLocation) {
@@ -146,12 +165,14 @@ public class MapView extends View implements GestureDetector.OnGestureListener,
 	@Override
 	public boolean onScale(final ScaleGestureDetector detector) {
 		scale *= detector.getScaleFactor();
+
 		return true;
 	}
 
 	@Override
 	public boolean onScaleBegin(final ScaleGestureDetector detector) {
 		scaling = true;
+
 		return true;
 	}
 
