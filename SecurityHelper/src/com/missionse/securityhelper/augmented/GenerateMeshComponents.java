@@ -100,13 +100,15 @@ public class GenerateMeshComponents {
 	public static List<MarkerObject> getServerInfo(final BasicMultiSetup s){
 		List<MarkerObject> retVal = new LinkedList<MarkerObject>();
 		
-		MeshComponent mesh = GLFactory.getInstance().newTexturedSquare("checkIdGood", IO.loadBitmapFromId(s.getActivity(), R.drawable.correctcirclegreen));
+		//MeshComponent mesh = GLFactory.getInstance().newTexturedSquare("checkIdGood", IO.loadBitmapFromId(s.getActivity(), R.drawable.correctcirclegreen));
+		MeshComponent mesh = GLFactory.getInstance().newSquare(Color.green());
 		mesh.setOnClickCommand(new CommandShowToast(s.getActivity(),"Everything is good"));
 		mesh.addChild(new AnimationFaceToCamera(s.getCamera(), 0.5f));
-		mesh.setScale(new Vec(2, 2, 2));
+		//mesh.setScale(new Vec(2, 2, 2));
 		retVal.add(MarkerObjectFactory.createTimeoutMarker(s, 4, mesh));
 		
-		MeshComponent mesh1 = GLFactory.getInstance().newTexturedSquare("checkIdBad", IO.loadBitmapFromId(s.getActivity(), R.drawable.warningcirclered));
+		//MeshComponent mesh1 = GLFactory.getInstance().newTexturedSquare("checkIdBad", IO.loadBitmapFromId(s.getActivity(), R.drawable.warningcirclered));
+		MeshComponent mesh1  = GLFactory.getInstance().newSquare(Color.red());
 		mesh1.setOnClickCommand(new Command() {
 
 			@Override
@@ -128,7 +130,7 @@ public class GenerateMeshComponents {
 		}});
 		
 		mesh1.addChild(new AnimationFaceToCamera(s.getCamera(), 0.5f));
-		mesh1.setScale(new Vec(2, 2, 2));
+		//mesh1.setScale(new Vec(2, 2, 2));
 		retVal.add(MarkerObjectFactory.createTimeoutMarker(s, 5, mesh1));
 		
 		
