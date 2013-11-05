@@ -17,6 +17,7 @@ import com.missionse.securityhelper.database.PersonDetailFragment;
 import com.missionse.securityhelper.database.PersonListFragment;
 import com.missionse.securityhelper.database.model.Person;
 import com.missionse.securityhelper.map.MapFragment;
+import com.missionse.securityhelper.video.VideoFragment;
 
 public class SecurityHelper extends Activity implements ObjectLoadedListener {
 
@@ -26,6 +27,7 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 	private ExitDetailFragment exitDetailFragment;
 	private MapFragment mapFragment;
 	private ModelViewerFragment modelFragment;
+	private VideoFragment videoFragment;
 
 	private SlidingMenu leftMenu;
 	private SlidingMenu rightMenu;
@@ -39,6 +41,8 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		personDetailFragment = new PersonDetailFragment();
 		locationDetailFragment = new LocationDetailFragment();
 		exitDetailFragment = new ExitDetailFragment();
+
+		videoFragment = new VideoFragment();
 
 		mapFragment = new MapFragment();
 
@@ -137,6 +141,14 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		getFragmentManager().executePendingTransactions();
 
 		personDetailFragment.refresh();
+	}
+
+	public void showSecurityVideo(final String location) {
+		FragmentTransaction rightTransaction = getFragmentManager().beginTransaction();
+		rightTransaction.replace(R.id.right_content, videoFragment);
+		rightTransaction.commit();
+
+		getFragmentManager().executePendingTransactions();
 	}
 
 	public void showLocation(final String location) {

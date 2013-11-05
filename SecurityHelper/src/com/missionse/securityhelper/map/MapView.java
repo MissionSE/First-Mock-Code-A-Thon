@@ -141,7 +141,7 @@ public class MapView extends View implements GestureDetector.OnGestureListener, 
 				} else if (location.equals("C4Door")) {
 					securityHelper.showExitDetail(location);
 				} else if (location.equals("Camera")) {
-//					securityHelper.showSecurityVideo(location);
+					securityHelper.showSecurityVideo(location);
 				}
 			}
 		}
