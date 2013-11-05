@@ -5,7 +5,11 @@ import system.ArActivity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.hardware.Camera;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,11 +24,16 @@ import com.missionse.securityhelper.database.LocationDetailFragment;
 import com.missionse.securityhelper.database.PersonDetailFragment;
 import com.missionse.securityhelper.database.PersonListFragment;
 import com.missionse.securityhelper.map.MapFragment;
+import com.missionse.securityhelper.picture.PictureFragment;
 import com.missionse.securityhelper.reference.ReferenceManualFragment;
 import com.missionse.securityhelper.reference.SingleManualFragment;
 import com.missionse.securityhelper.video.VideoFragment;
 
 public class SecurityHelper extends Activity implements ObjectLoadedListener {
+
+	static final int TAKE_SECURITY_PICTURE = 1234;
+
+	private boolean flashlightOn = false;
 
 	private PersonListFragment personListFragment;
 	private PersonDetailFragment personDetailFragment;
@@ -35,6 +44,7 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 	private VideoFragment videoFragment;
 	private ReferenceManualFragment refManualFragment;
 	private SingleManualFragment singleManualFragment;
+	private PictureFragment pictureFragment;
 
 	private SlidingMenu leftMenu;
 	private SlidingMenu rightMenu;
@@ -50,6 +60,7 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 		exitDetailFragment = new ExitDetailFragment();
 		refManualFragment = new ReferenceManualFragment();
 		singleManualFragment = new SingleManualFragment();
+		pictureFragment = new PictureFragment();
 
 		videoFragment = new VideoFragment();
 
@@ -225,11 +236,50 @@ public class SecurityHelper extends Activity implements ObjectLoadedListener {
 	public void showCamera() {
 		leftMenu.showContent();
 		rightMenu.showContent();
+
+		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		startActivityForResult(takePictureIntent, TAKE_SECURITY_PICTURE);
+	}
+
+	@Override
+	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+		// Check which request we're responding to
+		if (requestCode == TAKE_SECURITY_PICTURE) {
+			// Make sure the request was successful
+			if (resultCode == RESULT_OK) {
+
+				Bundle extras = data.getExtras();
+				Bitmap mImageBitmap = (Bitmap) extras.get("data");
+
+				FragmentTransaction transaction = getFragmentManager().beginTransaction();
+				transaction.replace(R.id.right_content, pictureFragment).addToBackStack("singleman");
+				transaction.commit();
+
+				getFragmentManager().executePendingTransactions();
+
+				pictureFragment.setImageBitmap(mImageBitmap);
+			}
+		}
 	}
 
 	public void showFlashlight() {
 		leftMenu.showContent();
 		rightMenu.showContent();
+		Camera cam;
+		if (flashlightOn) {
+			// cam = Camera.open();
+			// cam.stopPreview();
+			// cam.release();
+			flashlightOn = false;
+		} else {
+
+			// cam = Camera.open();
+			// Parameters cameraParameters = cam.getParameters();
+			// cameraParameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
+			// cam.setParameters(cameraParameters);
+			// cam.startPreview();
+			flashlightOn = true;
+		}
 	}
 
 	public void showNextLocationFinder() {
